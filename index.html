@@ -1,407 +1,2542 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LSPD Application — XenForo BBCode Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSPD Application Builder</title>
+
 <style>
-:root{
-  --bg:#07111f;
-  --bg2:#0b1728;
-  --card:rgba(15,28,47,.82);
-  --card2:rgba(18,34,56,.92);
-  --text:#edf5ff;
-  --muted:#91a5bd;
-  --line:rgba(148,176,205,.16);
-  --accent:#5aa9ff;
-  --accent2:#2877c7;
-  --green:#35d39a;
-  --danger:#ff6b7a;
-  --shadow:0 22px 70px rgba(0,0,0,.28);
+* {
+    box-sizing: border-box;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  min-height:100vh;
-  color:var(--text);
-  font:14px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:
-    radial-gradient(circle at 15% 0%,rgba(52,133,211,.18),transparent 32%),
-    radial-gradient(circle at 90% 10%,rgba(67,91,190,.13),transparent 28%),
-    linear-gradient(135deg,var(--bg),var(--bg2));
+
+:root {
+    --bg: #080d14;
+    --panel: #101720;
+    --panel-2: #141e29;
+    --panel-3: #0c131c;
+    --border: #263342;
+    --border-light: #344456;
+
+    --text: #edf3f8;
+    --muted: #8998a8;
+
+    --blue: #3c9cff;
+    --blue-dark: #1768b2;
+    --blue-soft: rgba(60,156,255,.12);
+
+    --green: #35d39a;
+    --red: #ff6675;
+
+    --radius: 14px;
 }
-body:before{
-  content:"";
-  position:fixed;inset:0;pointer-events:none;opacity:.25;
-  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-  background-size:36px 36px;
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at top left, rgba(42,111,177,.12), transparent 35%),
+        var(--bg);
+
+    color: var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 }
-.wrap{max-width:1240px;margin:0 auto;padding:28px 18px 120px;position:relative}
-.hero{
-  position:relative;overflow:hidden;
-  padding:30px;
-  margin-bottom:18px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:linear-gradient(135deg,rgba(26,65,103,.92),rgba(10,25,43,.86));
-  box-shadow:var(--shadow);
+
+/* =========================
+   APP
+========================= */
+
+.app {
+    min-height: 100vh;
+    display: flex;
 }
-.hero:after{
-  content:"LSPD";
-  position:absolute;right:-15px;bottom:-48px;
-  font-size:150px;font-weight:900;letter-spacing:-10px;
-  color:rgba(255,255,255,.035);
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 270px;
+    min-height: 100vh;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    background: #0b1119;
+    border-right: 1px solid var(--border);
+
+    padding: 24px 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 50;
 }
-.badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 10px;border:1px solid rgba(255,255,255,.14);
-  border-radius:999px;background:rgba(255,255,255,.06);
-  color:#cce6ff;font-size:11px;font-weight:800;letter-spacing:.12em;
+
+.logo {
+    padding: 8px 10px 25px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
 }
-.badge:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
-.hero h1{margin:13px 0 4px;font-size:30px;letter-spacing:-.7px}
-.hero p{margin:0;color:#afc4da}
-.progress{
-  margin-top:22px;height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden
+
+.logo-title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: .3px;
 }
-.progress > div{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--accent),#78c4ff);transition:width .35s ease}
-.progressText{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#8fa8c1}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{
-  background:linear-gradient(180deg,rgba(18,34,55,.9),rgba(10,23,40,.88));
-  border:1px solid var(--line);border-radius:18px;padding:20px;
-  box-shadow:0 12px 45px rgba(0,0,0,.18);
-  backdrop-filter:blur(14px);
+
+.logo-subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 1px;
 }
-.card.full{grid-column:1/-1}
-.card:hover{border-color:rgba(90,169,255,.24)}
-h2{
-  display:flex;align-items:center;gap:10px;
-  margin:0 0 17px;padding-bottom:12px;
-  border-bottom:1px solid var(--line);
-  color:#dcecff;font-size:16px;letter-spacing:.1px
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
-h2:before{
-  content:"";width:4px;height:19px;border-radius:8px;
-  background:var(--accent);box-shadow:0 0 15px rgba(90,169,255,.45)
+
+.step {
+    width: 100%;
+    border: 0;
+    background: transparent;
+
+    color: #8090a0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px 12px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition: .18s;
 }
-h3{font-size:13px;color:#b9d0e8;margin:20px 0 9px}
-.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-label{display:block;font-weight:700;margin-bottom:6px;color:#c9d8e8;font-size:12px}
-input,select,textarea{
-  width:100%;border:1px solid rgba(146,171,198,.18);
-  border-radius:10px;padding:10px 11px;
-  font:inherit;background:rgba(4,13,24,.58);color:var(--text);
-  transition:border-color .18s,box-shadow .18s,background .18s,transform .18s
+
+.step:hover {
+    background: rgba(255,255,255,.035);
+    color: white;
 }
-input::placeholder,textarea::placeholder{color:#5f738b}
-input:hover,textarea:hover{background:rgba(4,13,24,.72)}
-input:focus,select:focus,textarea:focus{
-  outline:0;border-color:rgba(90,169,255,.7);
-  box-shadow:0 0 0 3px rgba(90,169,255,.11)
+
+.step.active {
+    background: var(--blue-soft);
+    color: #eaf5ff;
 }
-textarea{min-height:100px;resize:vertical}
-.q{
-  padding:12px 0;border-bottom:1px solid rgba(148,176,205,.09);
-  transition:padding .2s,background .2s
+
+.step.completed {
+    color: #b8d8f4;
 }
-.q:last-child{border-bottom:0}
-.q b{font-size:13px;color:#d8e5f2}
-.q:hover{background:rgba(255,255,255,.018);padding-left:7px;padding-right:7px;border-radius:9px}
-.checks{display:flex;gap:8px;margin-top:8px}
-.checks label{
-  display:inline-flex;align-items:center;gap:7px;margin:0;
-  padding:6px 11px;border:1px solid var(--line);border-radius:8px;
-  cursor:pointer;font-weight:700;color:#8ea6bd;background:rgba(255,255,255,.025)
+
+.step-number {
+    width: 29px;
+    height: 29px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #151f2b;
+    border: 1px solid var(--border);
+
+    font-size: 12px;
+    font-weight: 800;
 }
-.checks label:has(input:checked){
-  color:#dff1ff;border-color:rgba(90,169,255,.45);background:rgba(90,169,255,.1)
+
+.step.active .step-number {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
 }
-.checks input{width:auto;accent-color:var(--accent)}
-.output{
-  min-height:500px;font:12px/1.6 "JetBrains Mono",Consolas,Monaco,monospace;
-  color:#cfe3f7;background:#050d18;border-color:rgba(90,169,255,.14)
+
+.step.completed .step-number {
+    background: rgba(53,211,154,.12);
+    border-color: rgba(53,211,154,.3);
+    color: var(--green);
 }
-.hint{color:var(--muted);font-size:12px;margin-top:8px}
-.ok{color:var(--green);font-weight:800}
-.actions{
-  position:sticky;bottom:14px;display:flex;gap:9px;justify-content:center;
-  margin:18px 0;z-index:20;padding:9px;
-  border:1px solid var(--line);border-radius:15px;
-  background:rgba(7,17,31,.78);backdrop-filter:blur(18px);
-  box-shadow:0 15px 45px rgba(0,0,0,.25)
+
+.step-title {
+    font-size: 13px;
+    font-weight: 650;
 }
-button{
-  border:1px solid transparent;border-radius:10px;padding:11px 17px;
-  font-weight:800;cursor:pointer;color:#fff;transition:.18s;
-  font-size:13px
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    border-top: 1px solid var(--border);
+
+    padding: 18px 8px 0;
 }
-button:hover{transform:translateY(-1px)}
-button:active{transform:translateY(0)}
-.primary{
-  background:linear-gradient(135deg,#3f9cf0,#246eb9);
-  box-shadow:0 8px 22px rgba(45,129,205,.25)
+
+.progress-mini {
+    height: 5px;
+    background: #18222d;
+    border-radius: 99px;
+    overflow: hidden;
 }
-.primary:hover{filter:brightness(1.08)}
-.secondary{background:rgba(255,255,255,.055);border-color:var(--line);color:#c8d7e7}
-.secondary:hover{background:rgba(255,255,255,.09)}
-.toast{
-  position:fixed;right:18px;bottom:18px;z-index:100;
-  padding:11px 15px;border:1px solid rgba(53,211,154,.25);
-  background:rgba(11,35,31,.94);color:#baf6df;border-radius:10px;
-  box-shadow:var(--shadow);transform:translateY(20px);opacity:0;
-  pointer-events:none;transition:.25s
+
+.progress-mini div {
+    width: 0%;
+    height: 100%;
+    background: var(--blue);
+    transition: width .3s;
 }
-.toast.show{transform:translateY(0);opacity:1}
-@media(max-width:850px){
-  .grid{grid-template-columns:1fr}.card.full{grid-column:auto}
-  .row{grid-template-columns:1fr}
-  .hero h1{font-size:24px}
-  .actions{flex-wrap:wrap}
-  button{flex:1;min-width:145px}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    margin-top: 8px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    margin-left: 270px;
+
+    width: calc(100% - 270px);
+
+    min-height: 100vh;
+
+    padding: 35px 45px;
+}
+
+.container {
+    max-width: 980px;
+    margin: auto;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.topbar-left h1 {
+    margin: 0;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.topbar-left p {
+    margin: 5px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.status {
+    padding: 7px 11px;
+
+    border-radius: 99px;
+
+    border: 1px solid rgba(53,211,154,.2);
+
+    background: rgba(53,211,154,.07);
+
+    color: #8ceac5;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.section-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+
+.section-header {
+    padding: 25px 28px;
+
+    border-bottom: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(60,156,255,.06),
+            transparent
+        );
+}
+
+.section-header small {
+    color: var(--blue);
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    font-size: 10px;
+
+    letter-spacing: 1.3px;
+}
+
+.section-header h2 {
+    margin: 6px 0 0;
+
+    font-size: 21px;
+}
+
+.section-header p {
+    margin: 7px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.section-body {
+    padding: 28px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap: 17px;
+}
+
+.form-grid.three {
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #c7d3df;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.field input,
+.field textarea,
+.field select {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    padding: 11px 12px;
+
+    background: var(--panel-3);
+
+    color: white;
+
+    outline: none;
+
+    font: inherit;
+
+    transition: .18s;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+    border-color: var(--blue);
+
+    box-shadow:
+        0 0 0 3px rgba(60,156,255,.09);
+}
+
+.field textarea {
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+.field small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #657586;
+
+    font-size: 11px;
+}
+
+/* =========================
+   QUESTION
+========================= */
+
+.question {
+    padding: 16px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.question:last-child {
+    border-bottom: 0;
+}
+
+.question-text {
+    font-size: 13px;
+
+    color: #dce5ed;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+}
+
+.answers {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.answer {
+    cursor: pointer;
+}
+
+.answer input {
+    display: none;
+}
+
+.answer span {
+    display: block;
+
+    padding: 7px 16px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: #0c141e;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .15s;
+}
+
+.answer:hover span {
+    border-color: var(--border-light);
+
+    color: white;
+}
+
+.answer input:checked + span {
+    border-color: var(--blue);
+
+    background: var(--blue-soft);
+
+    color: #ddecff;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice {
+    padding: 15px 17px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: #0c141d;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    margin-top: 20px;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.accept {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 15px;
+
+    margin-top: 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: rgba(60,156,255,.04);
+
+    cursor: pointer;
+}
+
+.accept input {
+    margin-top: 3px;
+
+    accent-color: var(--blue);
+}
+
+.accept span {
+    font-size: 13px;
+
+    color: #c9d7e5;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.navigation {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 17px;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+
+    gap: 9px;
+}
+
+.btn {
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    padding: 10px 16px;
+
+    background: #111a24;
+
+    color: #c7d4df;
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition: .18s;
+}
+
+.btn:hover {
+    border-color: var(--border-light);
+
+    color: white;
+}
+
+.btn.primary {
+    background: var(--blue);
+
+    border-color: var(--blue);
+
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #58aaff;
+}
+
+.btn.danger {
+    color: #ff8994;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview {
+    background: white;
+
+    color: #20252b;
+
+    border-radius: 10px;
+
+    padding: 35px;
+
+    max-height: 650px;
+
+    overflow: auto;
+
+    line-height: 1.6;
+}
+
+.preview h1,
+.preview h2,
+.preview h3 {
+    color: #111;
+}
+
+.bbcode {
+    width: 100%;
+
+    min-height: 500px;
+
+    padding: 17px;
+
+    resize: vertical;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    background: #070c12;
+
+    color: #cce3f7;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+
+    outline: none;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+
+    right: 25px;
+
+    bottom: 25px;
+
+    padding: 12px 17px;
+
+    border-radius: 10px;
+
+    background: #152333;
+
+    border: 1px solid #30465c;
+
+    color: white;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,.3);
+
+    transform: translateY(20px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .25s;
+
+    z-index: 999;
+}
+
+.toast.show {
+    transform: translateY(0);
+
+    opacity: 1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 850px) {
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        min-height: auto;
+
+        border-right: 0;
+
+        border-bottom: 1px solid var(--border);
+
+        padding: 15px;
+    }
+
+    .app {
+        display: block;
+    }
+
+    .logo {
+        padding-bottom: 15px;
+
+        margin-bottom: 12px;
+    }
+
+    .steps {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .step {
+        justify-content: center;
+    }
+
+    .step-title {
+        display: none;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main {
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 20px 12px 50px;
+    }
+
+    .form-grid,
+    .form-grid.three {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .section-body,
+    .section-header {
+        padding: 20px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+    }
+}
+
+@media(max-width:500px) {
+
+    .steps {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .step {
+        justify-content: flex-start;
+    }
+
+    .step-title {
+        display: block;
+    }
+
+    .navigation {
+        flex-direction: column-reverse;
+
+        gap: 10px;
+    }
+
+    .nav-left,
+    .nav-right {
+        width: 100%;
+    }
+
+    .nav-left .btn,
+    .nav-right .btn {
+        flex: 1;
+    }
 }
 </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="hero">
-    <h1>LOS SANTOS POLICE DEPARTMENT</h1>
-    <p>Генератор анкеты для XenForo • заполняешь поля → получаешь готовый BBCode → копируешь на форум.</p>
-    <div class="progress"><div id="progressBar"></div></div>
-    <div class="progressText"><span id="progressLabel">Заполнено 0%</span><span>Анкета LSPD</span></div>
-  </div>
 
-  <div class="grid">
-    <section class="card">
-      <h2>1. Персональная информация</h2>
-      <div class="row">
-        <div><label>Полное имя</label><input id="fullname"></div>
-        <div><label>Фото профиля (URL)</label><input id="profilePhoto"></div>
-        <div><label>Пол</label><input id="sex"></div>
-        <div><label>Возраст</label><input id="age" type="number"></div>
-        <div><label>Дата рождения</label><input id="bdate"></div>
-        <div><label>Номер телефона</label><input id="tnumber"></div>
-        <div><label>Гражданство / резидентство</label><input id="citizenship"></div>
-        <div><label>Этническая группа / раса</label><input id="race"></div>
-        <div><label>Образование</label><input id="education"></div>
-        <div><label>Место рождения</label><input id="badress"></div>
-        <div><label>Адрес проживания</label><input id="ladress"></div>
-        <div><label>E-mail</label><input id="email" type="email"></div>
-        <div><label>Номер соц. страхования</label><input id="ssnumber"></div>
-      </div>
-    </section>
+<div class="app">
 
-    <section class="card">
-      <h2>2. Уголовные правонарушения</h2>
-      <div id="criminal"></div>
-      <h2 style="margin-top:20px">3. Лицензии и разрешения</h2>
-      <div id="licenses"></div>
-    </section>
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-    <section class="card">
-      <h2>4. Декларация</h2>
-      <div class="q">
-        <b>Принимаете условия заявления?</b>
-        <div class="checks">
-          <label><input type="radio" name="accept1" value="Да" checked> Да</label>
-          <label><input type="radio" name="accept1" value="Нет"> Нет</label>
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-title">
+                LOS SANTOS POLICE DEPARTMENT
+            </div>
+
+            <div class="logo-subtitle">
+                APPLICATION BUILDER
+            </div>
         </div>
-      </div>
-    </section>
 
-    <section class="card">
-      <h2>5. Out of Character</h2>
-      <div class="row">
-        <div><label>Имя</label><input id="oocname"></div>
-        <div><label>Возраст</label><input id="oocage" type="number"></div>
-        <div><label>Опыт игры</label><input id="oocexp"></div>
-        <div><label>Место жительства / часовой пояс</label><input id="oocplace"></div>
-        <div><label>VK</label><input id="vk"></div>
-        <div><label>Форумный аккаунт G-RP</label><input id="grplink"></div>
-        <div><label>Discord</label><input id="discordlogin"></div>
-      </div>
+        <div class="steps">
 
-      <h3>Дополнительные вопросы</h3>
-      <div id="oocquestions"></div>
+            <button class="step active" data-step="1">
+                <span class="step-number">01</span>
+                <span class="step-title">Персональные данные</span>
+            </button>
 
-      <h3>5.11 Персонаж</h3>
-      <textarea id="characterdesc" placeholder="Что будете играть во фракции? Чем персонаж отличается от других? Планы на персонажа..."></textarea>
+            <button class="step" data-step="2">
+                <span class="step-number">02</span>
+                <span class="step-title">Уголовные вопросы</span>
+            </button>
 
-      <h3>5.12 Скриншот личного кабинета</h3>
-      <textarea id="lkscreen" placeholder="Вставьте ссылку на полный скриншот"></textarea>
+            <button class="step" data-step="3">
+                <span class="step-number">03</span>
+                <span class="step-title">Лицензии</span>
+            </button>
 
-      <h3>5.13 Скриншот 2FA</h3>
-      <textarea id="2fascreen" placeholder="Вставьте ссылку на полный скриншот"></textarea>
+            <button class="step" data-step="4">
+                <span class="step-number">04</span>
+                <span class="step-title">Декларация</span>
+            </button>
 
-      <h3>5.14 Интересные роли</h3>
-      <textarea id="ss" placeholder="Ссылки на топики / СС"></textarea>
-    </section>
+            <button class="step" data-step="5">
+                <span class="step-number">05</span>
+                <span class="step-title">OOC информация</span>
+            </button>
 
-    <section class="card full">
-      <h2>Готовый XenForo BBCode</h2>
-      <textarea id="output" class="output" readonly></textarea>
-      <div id="status" class="hint">Нажмите «Сгенерировать BBCode».</div>
-    </section>
-  </div>
+            <button class="step" data-step="6">
+                <span class="step-number">06</span>
+                <span class="step-title">Персонаж</span>
+            </button>
 
-  <div class="actions">
-    <button class="primary" onclick="generate()">Сгенерировать BBCode</button>
-    <button class="secondary" onclick="copyCode()">Копировать код</button>
-    <button class="secondary" onclick="clearAll()">Очистить</button>
-  </div>
+            <button class="step" data-step="7">
+                <span class="step-number">07</span>
+                <span class="step-title">Предпросмотр</span>
+            </button>
+
+            <button class="step" data-step="8">
+                <span class="step-number">08</span>
+                <span class="step-title">Готовый BBCode</span>
+            </button>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="progress-mini">
+                <div id="progress"></div>
+            </div>
+
+            <div class="progress-info">
+                <span>Заполнение</span>
+                <span id="progressText">0%</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <div class="container">
+
+            <div class="topbar">
+
+                <div class="topbar-left">
+
+                    <h1 id="pageTitle">
+                        Персональные данные
+                    </h1>
+
+                    <p id="pageDescription">
+                        Основная информация кандидата
+                    </p>
+
+                </div>
+
+                <div class="status">
+                    LSPD APPLICATION
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 STEP 1
+            ====================================================== -->
+
+            <section class="step-page" data-page="1">
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 01</small>
+
+                        <h2>
+                            Персональная информация
+                        </h2>
+
+                        <p>
+                            Заполните основные сведения о вашем персонаже.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>Полное имя</label>
+                                <input id="fullname"
+                                       placeholder="Имя Фамилия">
+                            </div>
+
+                            <div class="field">
+                                <label>Фото профиля</label>
+                                <input id="profilePhoto"
+                                       placeholder="https://...">
+                                <small>
+                                    Прямая ссылка на изображение.
+                                </small>
+                            </div>
+
+                            <div class="field">
+                                <label>Пол</label>
+                                <input id="sex"
+                                       placeholder="Мужской / Женский">
+                            </div>
+
+                            <div class="field">
+                                <label>Возраст</label>
+                                <input id="age"
+                                       type="number"
+                                       placeholder="25">
+                            </div>
+
+                            <div class="field">
+                                <label>Дата рождения</label>
+                                <input id="bdate"
+                                       placeholder="01.01.2001">
+                            </div>
+
+                            <div class="field">
+                                <label>Номер мобильного телефона</label>
+                                <input id="tnumber"
+                                       placeholder="555-0000">
+                            </div>
+
+                            <div class="field">
+                                <label>Гражданство / резидентство</label>
+                                <input id="citizenship">
+                            </div>
+
+                            <div class="field">
+                                <label>Этническая группа / раса</label>
+                                <input id="race">
+                            </div>
+
+                            <div class="field">
+                                <label>Образование</label>
+                                <input id="education"
+                                       placeholder="Los Santos University">
+                            </div>
+
+                            <div class="field">
+                                <label>Место рождения</label>
+                                <input id="badress">
+                            </div>
+
+                            <div class="field">
+                                <label>Адрес проживания</label>
+                                <input id="ladress">
+                            </div>
+
+                            <div class="field">
+                                <label>Адрес электронной почты</label>
+                                <input id="email"
+                                       type="email"
+                                       placeholder="example@email.com">
+                            </div>
+
+                            <div class="field full">
+                                <label>
+                                    Номер социального страхования
+                                </label>
+
+                                <input id="ssnumber">
+                            </div>
+
+                        </div>
+
+                        <div class="notice">
+                            Указанный адрес электронной почты используется
+                            для связи с муниципальными органами города
+                            Лос-Сантоса и получения информации о прохождении
+                            отбора.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 2
+            ====================================================== -->
+
+            <section class="step-page" data-page="2" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 02</small>
+
+                        <h2>
+                            Уголовные правонарушения
+                        </h2>
+
+                        <p>
+                            Ответьте честно на каждый вопрос.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div id="criminalQuestions"></div>
+
+                        <div class="notice">
+                            Уголовные правонарушения включают нарушения,
+                            которые могут повлечь уголовную ответственность
+                            в соответствии с законодательством.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 3
+            ====================================================== -->
+
+            <section class="step-page" data-page="3" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 03</small>
+
+                        <h2>
+                            Лицензии и разрешения
+                        </h2>
+
+                        <p>
+                            Информация о водительских и оружейных лицензиях.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div id="licenseQuestions"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 4
+            ====================================================== -->
+
+            <section class="step-page" data-page="4" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 04</small>
+
+                        <h2>
+                            Декларация абитуриента
+                        </h2>
+
+                        <p>
+                            Подтверждение достоверности предоставленной
+                            информации.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="notice">
+
+                            Я подтверждаю, что вся информация,
+                            указанная в данном заявлении, является
+                            достоверной.
+
+                            <br><br>
+
+                            Я понимаю, что предоставление ложной
+                            информации может привести к отклонению
+                            заявки и другим последствиям согласно
+                            правилам сообщества.
+
+                            <br><br>
+
+                            Я даю согласие на обработку своих
+                            персональных данных.
+
+                        </div>
+
+                        <label class="accept">
+
+                            <input type="checkbox"
+                                   id="accept1">
+
+                            <span>
+                                Я ознакомлен(-а) с условиями заявления
+                                и принимаю их.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 5
+            ====================================================== -->
+
+            <section class="step-page" data-page="5" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 05</small>
+
+                        <h2>
+                            Out Of Character
+                        </h2>
+
+                        <p>
+                            Информация об игроке.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>Имя</label>
+                                <input id="oocname">
+                            </div>
+
+                            <div class="field">
+                                <label>Возраст</label>
+                                <input id="oocage"
+                                       type="number">
+                            </div>
+
+                            <div class="field">
+                                <label>Опыт игры</label>
+                                <input id="oocexp"
+                                       placeholder="2 года">
+                            </div>
+
+                            <div class="field">
+                                <label>
+                                    Место жительства / часовой пояс
+                                </label>
+                                <input id="oocplace"
+                                       placeholder="Москва / GMT+3">
+                            </div>
+
+                            <div class="field">
+                                <label>VK</label>
+                                <input id="vk"
+                                       placeholder="https://vk.com/...">
+                            </div>
+
+                            <div class="field">
+                                <label>Форумный аккаунт G-RP</label>
+                                <input id="grplink">
+                            </div>
+
+                            <div class="field full">
+                                <label>Discord логин</label>
+                                <input id="discordlogin">
+                            </div>
+
+                        </div>
+
+                        <h3>
+                            Дополнительные вопросы
+                        </h3>
+
+                        <div id="oocQuestions"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 6
+            ====================================================== -->
+
+            <section class="step-page" data-page="6" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 06</small>
+
+                        <h2>
+                            Персонаж и материалы
+                        </h2>
+
+                        <p>
+                            Опишите будущую роль и приложите необходимые
+                            материалы.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="field">
+
+                            <label>
+                                5.11 — Что вы собираетесь играть
+                                во фракции?
+                            </label>
+
+                            <textarea id="characterdesc"
+                                      placeholder="Опишите персонажа, его характер, особенности, историю и планы развития..."></textarea>
+
+                        </div>
+
+                        <br>
+
+                        <div class="field">
+
+                            <label>
+                                5.12 — Скриншот личного кабинета
+                            </label>
+
+                            <textarea id="lkscreen"
+                                      placeholder="Ссылка на полный скриншот личного кабинета..."></textarea>
+
+                        </div>
+
+                        <br>
+
+                        <div class="field">
+
+                            <label>
+                                5.13 — Скриншот двухфакторной защиты
+                            </label>
+
+                            <textarea id="2fascreen"
+                                      placeholder="Ссылка на скриншот 2FA..."></textarea>
+
+                        </div>
+
+                        <br>
+
+                        <div class="field">
+
+                            <label>
+                                5.14 — Интересные роли за историю игры
+                            </label>
+
+                            <textarea id="ss"
+                                      placeholder="Ссылки на топики, СС и другие интересные роли..."></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 7
+            ====================================================== -->
+
+            <section class="step-page" data-page="7" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 07</small>
+
+                        <h2>
+                            Предпросмотр
+                        </h2>
+
+                        <p>
+                            Проверьте анкету перед генерацией BBCode.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <div class="preview"
+                             id="preview">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 8
+            ====================================================== -->
+
+            <section class="step-page" data-page="8" hidden>
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <small>Раздел 08</small>
+
+                        <h2>
+                            Готовый XenForo BBCode
+                        </h2>
+
+                        <p>
+                            Скопируйте код и вставьте его в редактор
+                            вашего форума.
+                        </p>
+
+                    </div>
+
+                    <div class="section-body">
+
+                        <textarea
+                            id="bbcode"
+                            class="bbcode"
+                            readonly>
+                        </textarea>
+
+                        <br><br>
+
+                        <button class="btn primary"
+                                onclick="copyBBCode()">
+
+                            Копировать BBCode
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 NAVIGATION
+            ====================================================== -->
+
+            <div class="navigation">
+
+                <div class="nav-left">
+
+                    <button
+                        class="btn danger"
+                        onclick="resetForm()">
+
+                        Очистить
+
+                    </button>
+
+                </div>
+
+                <div class="nav-right">
+
+                    <button
+                        class="btn"
+                        id="backBtn"
+                        onclick="previousStep()">
+
+                        ← Назад
+
+                    </button>
+
+                    <button
+                        class="btn primary"
+                        id="nextBtn"
+                        onclick="nextStep()">
+
+                        Далее →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
 </div>
 
+
+<div class="toast" id="toast"></div>
+
+
 <script>
-const criminalQs = [
-  "Вы или члены Вашей семьи были когда-либо арестованы/задержаны?",
-  "Вы или члены Вашей семьи когда-либо судились за нарушения ПДД?",
-  "Вы или члены Вашей семьи имели когда-либо закрытые уголовные дела?",
-  "Вы или члены Вашей семьи когда-либо были свидетелем в суде?",
-  "Брали ли у Вас когда-нибудь отпечатки ваших пальцев?"
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const criminalQuestions = [
+
+    "Вы или члены Вашей семьи были когда-либо арестованы/задержаны?",
+
+    "Вы или члены Вашей семьи когда-либо судились за нарушения ПДД?",
+
+    "Вы или члены Вашей семьи имели когда-либо закрытые уголовные дела?",
+
+    "Вы или члены Вашей семьи когда-либо были свидетелем в суде?",
+
+    "Брали ли у Вас когда-нибудь отпечатки ваших пальцев?"
+
 ];
 
-const licenseQs = [
-  "У вас есть водительские права?",
-  "Были ли ваши водительские права когда-либо изъяты?",
-  "Имеются ли у Вас неоплаченные штрафы?",
-  "Получали ли вы штрафы за последние пять лет?",
-  "Были ли вы участником дорожно-транспортного происшествия?",
-  "Вы имеете лицензию на огнестрельное оружие?",
-  "Была ли ваша оружейная лицензия когда-либо изъята?"
+
+const licenseQuestions = [
+
+    "У вас есть водительские права?",
+
+    "Были ли ваши водительские права когда-либо изъяты?",
+
+    "Имеются ли у Вас неоплаченные штрафы?",
+
+    "Получали ли вы штрафы за последние пять лет?",
+
+    "Были ли вы участником дорожно-транспортного происшествия?",
+
+    "Вы имеете лицензию на огнестрельное оружие?",
+
+    "Была ли ваша оружейная лицензия когда-либо изъята?"
+
 ];
 
-const oocQs = [
-  "Вы сможете проводить на лекциях около 3-х часов?",
-  "Можете ли Вы свободно общаться в TeamSpeak3 / Discord?",
-  "Имеется ли у вас рабочий микрофон?"
+
+const oocQuestions = [
+
+    "Вы сможете проводить на лекциях около 3-х часов?",
+
+    "Можете ли Вы свободно общаться в TeamSpeak3 / Discord?",
+
+    "Имеется ли у вас рабочий микрофон?"
+
 ];
 
-function questionHTML(arr, prefix){
-  return arr.map((q,i)=>`
-    <div class="q">
-      <b>${i+1}. ${q}</b>
-      <div class="checks">
-        <label><input type="radio" name="${prefix}${i}" value="Да" checked> Да</label>
-        <label><input type="radio" name="${prefix}${i}" value="Нет"> Нет</label>
-      </div>
-    </div>`).join("");
-}
-document.getElementById("criminal").innerHTML = questionHTML(criminalQs,"c");
-document.getElementById("licenses").innerHTML = questionHTML(licenseQs,"l");
-document.getElementById("oocquestions").innerHTML = questionHTML(oocQs,"o");
 
-function updateProgress(){
-  const fields=[...document.querySelectorAll("input:not([type=radio]):not([type=button]), textarea")];
-  const filled=fields.filter(x=>x.value.trim()).length;
-  const pct=fields.length ? Math.round(filled/fields.length*100) : 0;
-  document.getElementById("progressBar").style.width=pct+"%";
-  document.getElementById("progressLabel").textContent="Заполнено "+pct+"%";
-}
-function toast(msg){
-  const t=document.getElementById("toast");
-  t.textContent=msg;t.classList.add("show");
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer=setTimeout(()=>t.classList.remove("show"),1800);
-}
-document.addEventListener("input",updateProgress);
-document.addEventListener("change",updateProgress);
+/* =========================================================
+   CREATE QUESTIONS
+========================================================= */
 
-function val(id){return document.getElementById(id)?.value.trim() || "—"}
-function radio(name){return document.querySelector(`input[name="${name}"]:checked`)?.value || "Нет"}
-function safe(s){
-  return String(s).replace(/\[/g,"(").replace(/\]/g,")");
-}
-function line(n,label,value){return `[B]${n}[/B] [FONT=Arial]${safe(label)}[/FONT] ${safe(value)}\n`}
+function createQuestions(container, questions, prefix) {
 
-function generate(){
-  let b = "";
-  b += "[CENTER][IMG]https://i.imgur.com/N3WoplA.png[/IMG]\n";
-  b += "[SIZE=6][B]LOS SANTOS POLICE DEPARTMENT[/B][/SIZE]\n";
-  b += "[SIZE=5][B]PRELIMINARY BACKGROUND APPLICATION[/B][/SIZE][/CENTER]\n";
-  b += "[HR][/HR]\n\n";
+    const el = document.getElementById(container);
 
-  if(val("profilePhoto") !== "—") b += "[CENTER][IMG]"+safe(val("profilePhoto"))+"[/IMG][/CENTER]\n";
-  b += "[CENTER][SIZE=6][B]"+safe(val("fullname"))+"[/B][/SIZE]\n[SIZE=2](ПОЛНОЕ ИМЯ)[/SIZE][/CENTER]\n\n";
+    el.innerHTML = "";
 
-  b += "[HEADING=2]1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ[/HEADING]\n";
-  b += line("1.1","Пол:",val("sex"));
-  b += line("1.2","Возраст:",val("age"));
-  b += line("1.3","Дата рождения:",val("bdate"));
-  b += line("1.4","Номер моб. телефона:",val("tnumber"));
-  b += line("1.5","Гражданство, подданство, резидентство:",val("citizenship"));
-  b += line("1.6","Этническая группа / раса:",val("race"));
-  b += line("1.7","Образование:",val("education"));
-  b += line("1.8","Место рождения:",val("badress"));
-  b += line("1.9","Адрес проживания:",val("ladress"));
-  b += line("1.10","Адрес электронной почты:",val("email"));
-  b += line("1.11","Номер соц. страхования:",val("ssnumber"));
-  b += "[SIZE=2][COLOR=#777777]Указанный адрес электронной почты используется для связи с муниципальными органами города Лос-Сантоса. На него могут приходить уведомления о результатах отбора и иная справочная информация.[/COLOR][/SIZE]\n\n";
+    questions.forEach((question, index) => {
 
-  b += "[HEADING=2]2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ[/HEADING]\n";
-  criminalQs.forEach((q,i)=>{ b += `[B]2.${i+1}[/B] [B]${radio("c"+i)}[/B] — ${q}\n`; });
-  b += "\n[SIZE=2][COLOR=#777777]Уголовные правонарушения включают правонарушения, состав которых классифицируется нормами уголовного права и влечёт уголовную ответственность в соответствии с действующим законодательством.[/COLOR][/SIZE]\n\n";
+        const number = index + 1;
 
-  b += "[HEADING=2]3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ[/HEADING]\n";
-  licenseQs.forEach((q,i)=>{ b += `[B]3.${i+1}[/B] [B]${radio("l"+i)}[/B] — ${q}\n`; });
-  b += "\n";
+        el.innerHTML += `
 
-  b += "[HEADING=2]4. ДЕКЛАРАЦИЯ АБИТУРИЕНТА[/HEADING]\n";
-  b += "[JUSTIFY]Я подтверждаю, что вся информация в этом заявлении является достоверной. Я понимаю, что предоставление ложной информации может стать причиной отклонения заявки и иных последствий в соответствии с правилами сообщества. Я даю согласие на обработку своих персональных данных.[/JUSTIFY]\n";
-  b += "[B]"+radio("accept1")+" — Я принимаю условия данного заявления[/B]\n\n";
+            <div class="question">
 
-  b += "[HEADING=2]5. OUT OF CHARACTER INFORMATION[/HEADING]\n";
-  b += line("5.1","Имя:",val("oocname"));
-  b += line("5.2","Возраст:",val("oocage"));
-  b += line("5.3","Опыт игры:",val("oocexp"));
-  b += line("5.4","Место жительства / часовой пояс:",val("oocplace"));
-  b += line("5.5","Ссылка на VK:",val("vk"));
-  b += line("5.6","Ссылка на форумный аккаунт G-RP:",val("grplink"));
-  b += line("5.7","Discord логин:",val("discordlogin"));
-  oocQs.forEach((q,i)=>{ b += `[B]5.${8+i}[/B] [B]${radio("o"+i)}[/B] — ${q}\n`; });
+                <div class="question-text">
 
-  b += "\n[B]5.11[/B] Что вы собираетесь играть во фракции? Чем ваш персонаж отличается от других? Опишите будущего персонажа и планы на него:\n";
-  b += "[QUOTE]"+safe(val("characterdesc"))+"[/QUOTE]\n\n";
-  b += "[B]5.12[/B] Полный скриншот личного кабинета:\n";
-  b += "[QUOTE]"+safe(val("lkscreen"))+"[/QUOTE]\n\n";
-  b += "[B]5.13[/B] Полный скриншот двухфакторной защиты:\n";
-  b += "[QUOTE]"+safe(val("2fascreen"))+"[/QUOTE]\n\n";
-  b += "[B]5.14[/B] Ваши интересные роли за историю игры:\n";
-  b += "[SPOILER]"+safe(val("ss"))+"[/SPOILER]\n\n";
+                    ${number}.
+                    ${question}
 
-  b += "[JUSTIFY]Я ознакомлен(-а) с разделом About Us и JoinLSPD. Я соглашаюсь с правилами фракции и понимаю, что заявка может быть отклонена без объяснения причин. После прохождения академии я обязуюсь изучить информацию на форуме, включая мануал и хендбук, и соблюдать правила фракции.[/JUSTIFY]\n";
-  b += "[B]"+radio("accept1")+" — Я принимаю условия данного заявления[/B]\n\n";
-  b += "[HR][/HR]\n[CENTER][B][SIZE=5]\" TO PROTECT AND TO SERVE \"[/SIZE][/B]\n[IMG]https://i.imgur.com/dPpHP8M.png[/IMG][/CENTER]";
+                </div>
 
-  document.getElementById("output").value = b;
-  document.getElementById("status").innerHTML = '<span class="ok">Готово. Код можно копировать и вставлять в XenForo.</span>';
-  toast("BBCode успешно сгенерирован");
+                <div class="answers">
+
+                    <label class="answer">
+
+                        <input
+                            type="radio"
+                            name="${prefix}${index}"
+                            value="Да"
+                            checked>
+
+                        <span>Да</span>
+
+                    </label>
+
+
+                    <label class="answer">
+
+                        <input
+                            type="radio"
+                            name="${prefix}${index}"
+                            value="Нет">
+
+                        <span>Нет</span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
 }
 
-async function copyCode(){
-  const out=document.getElementById("output");
-  if(!out.value) generate();
-  try{
-    await navigator.clipboard.writeText(out.value);
-    document.getElementById("status").innerHTML='<span class="ok">Код скопирован в буфер обмена.</span>';
-    toast("Код скопирован");
-  }catch(e){
-    out.select(); document.execCommand("copy");
-    document.getElementById("status").innerHTML='<span class="ok">Код скопирован.</span>';
-    toast("Код скопирован");
-  }
+
+createQuestions(
+    "criminalQuestions",
+    criminalQuestions,
+    "criminal_"
+);
+
+createQuestions(
+    "licenseQuestions",
+    licenseQuestions,
+    "license_"
+);
+
+createQuestions(
+    "oocQuestions",
+    oocQuestions,
+    "ooc_"
+);
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+let currentStep = 1;
+
+const totalSteps = 8;
+
+
+const titles = {
+
+    1: [
+        "Персональные данные",
+        "Основная информация кандидата"
+    ],
+
+    2: [
+        "Уголовные вопросы",
+        "История правонарушений"
+    ],
+
+    3: [
+        "Лицензии",
+        "Водительские и оружейные лицензии"
+    ],
+
+    4: [
+        "Декларация",
+        "Подтверждение достоверности информации"
+    ],
+
+    5: [
+        "OOC информация",
+        "Информация об игроке"
+    ],
+
+    6: [
+        "Персонаж",
+        "Роль и дополнительные материалы"
+    ],
+
+    7: [
+        "Предпросмотр",
+        "Проверка анкеты перед публикацией"
+    ],
+
+    8: [
+        "Готовый BBCode",
+        "Код для вставки на XenForo"
+    ]
+
+};
+
+
+function showStep(step) {
+
+    currentStep = step;
+
+    document
+        .querySelectorAll(".step-page")
+        .forEach(page => {
+
+            page.hidden =
+                Number(page.dataset.page) !== step;
+
+        });
+
+
+    document
+        .querySelectorAll(".step")
+        .forEach(button => {
+
+            const buttonStep =
+                Number(button.dataset.step);
+
+            button.classList.toggle(
+                "active",
+                buttonStep === step
+            );
+
+            button.classList.toggle(
+                "completed",
+                buttonStep < step
+            );
+
+        });
+
+
+    document.getElementById("pageTitle").textContent =
+        titles[step][0];
+
+    document.getElementById("pageDescription").textContent =
+        titles[step][1];
+
+
+    document.getElementById("backBtn").style.visibility =
+        step === 1 ? "hidden" : "visible";
+
+
+    document.getElementById("nextBtn").textContent =
+        step === totalSteps
+            ? "Обновить BBCode"
+            : "Далее →";
+
+
+    updateProgress();
+
+
+    if (step === 7) {
+
+        buildPreview();
+
+    }
+
+
+    if (step === 8) {
+
+        generateBBCode();
+
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
 }
 
-function clearAll(){
-  document.querySelectorAll("input[type=text],input[type=email],input[type=number],textarea").forEach(x=>x.value="");
-  document.querySelectorAll("input[type=radio]").forEach(x=>x.checked=false);
-  document.querySelectorAll('input[type=radio][value="Нет"]').forEach(x=>x.checked=true);
-  document.querySelector('input[name="accept1"][value="Да"]').checked=true;
-  document.getElementById("output").value="";
-  document.getElementById("status").textContent="Поля очищены.";
-  updateProgress(); toast("Анкета очищена");
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function nextStep() {
+
+    if (currentStep < totalSteps) {
+
+        currentStep++;
+
+        showStep(currentStep);
+
+    } else {
+
+        generateBBCode();
+
+        toast("BBCode обновлён");
+
+    }
+
 }
+
+
+function previousStep() {
+
+    if (currentStep > 1) {
+
+        currentStep--;
+
+        showStep(currentStep);
+
+    }
+
+}
+
+
+document
+    .querySelectorAll(".step")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const target =
+                    Number(button.dataset.step);
+
+                showStep(target);
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function value(id) {
+
+    const el =
+        document.getElementById(id);
+
+    if (!el) return "";
+
+    return el.value.trim();
+
+}
+
+
+function answer(name) {
+
+    const el =
+        document.querySelector(
+            `input[name="${name}"]:checked`
+        );
+
+    return el ? el.value : "Нет";
+
+}
+
+
+function escapeBBCode(text) {
+
+    return String(text || "")
+        .replace(/\[/g, "(")
+        .replace(/\]/g, ")");
+
+}
+
+
+function questionAnswers(questions, prefix) {
+
+    return questions.map(
+        (_, index) =>
+            answer(prefix + index)
+    );
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress() {
+
+    const fields =
+        document.querySelectorAll(
+            "input:not([type=radio]):not([type=checkbox]), textarea"
+        );
+
+    let filled = 0;
+
+    fields.forEach(field => {
+
+        if (field.value.trim()) {
+
+            filled++;
+
+        }
+
+    });
+
+    const percent =
+        Math.round(
+            filled / fields.length * 100
+        );
+
+    document.getElementById("progress")
+        .style.width = percent + "%";
+
+    document.getElementById("progressText")
+        .textContent = percent + "%";
+
+}
+
+
+document.addEventListener(
+    "input",
+    updateProgress
+);
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function buildPreview() {
+
+    const fullname =
+        escapeBBCode(value("fullname")) ||
+        "Имя Фамилия";
+
+    const photo =
+        value("profilePhoto");
+
+    let html = "";
+
+    html += `
+        <div style="
+            text-align:center;
+            border-bottom:1px solid #ddd;
+            padding-bottom:20px;
+            margin-bottom:25px;
+        ">
+
+            ${
+                photo
+                ? `<img src="${photo}"
+                        style="
+                        max-width:130px;
+                        max-height:130px;
+                        border-radius:8px;
+                        margin-bottom:10px;
+                        ">`
+                : ""
+            }
+
+            <h1>
+                LOS SANTOS POLICE DEPARTMENT
+            </h1>
+
+            <h2>
+                PRELIMINARY BACKGROUND APPLICATION
+            </h2>
+
+            <h2>
+                ${fullname}
+            </h2>
+
+        </div>
+    `;
+
+
+    html += `
+        <h2>1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ</h2>
+
+        <p><b>Пол:</b> ${escapeBBCode(value("sex"))}</p>
+
+        <p><b>Возраст:</b> ${escapeBBCode(value("age"))}</p>
+
+        <p><b>Дата рождения:</b> ${escapeBBCode(value("bdate"))}</p>
+
+        <p><b>Телефон:</b> ${escapeBBCode(value("tnumber"))}</p>
+
+        <p><b>Гражданство:</b> ${escapeBBCode(value("citizenship"))}</p>
+
+        <p><b>Раса:</b> ${escapeBBCode(value("race"))}</p>
+
+        <p><b>Образование:</b> ${escapeBBCode(value("education"))}</p>
+
+        <p><b>Место рождения:</b> ${escapeBBCode(value("badress"))}</p>
+
+        <p><b>Адрес проживания:</b> ${escapeBBCode(value("ladress"))}</p>
+
+        <p><b>E-mail:</b> ${escapeBBCode(value("email"))}</p>
+
+        <p><b>SSN:</b> ${escapeBBCode(value("ssnumber"))}</p>
+    `;
+
+
+    html += `
+        <h2>2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ</h2>
+    `;
+
+    criminalQuestions.forEach((q, i) => {
+
+        html += `
+            <p>
+                <b>2.${i + 1}</b>
+                ${answer("criminal_" + i)}
+                — ${q}
+            </p>
+        `;
+
+    });
+
+
+    html += `
+        <h2>3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ</h2>
+    `;
+
+    licenseQuestions.forEach((q, i) => {
+
+        html += `
+            <p>
+                <b>3.${i + 1}</b>
+                ${answer("license_" + i)}
+                — ${q}
+            </p>
+        `;
+
+    });
+
+
+    html += `
+        <h2>4. ДЕКЛАРАЦИЯ</h2>
+
+        <p>
+            Я подтверждаю, что вся информация в заявлении
+            является достоверной.
+        </p>
+
+        <p>
+            <b>
+                ${
+                    document.getElementById("accept1").checked
+                    ? "Я ПРИНИМАЮ УСЛОВИЯ"
+                    : "Я НЕ ПРИНИМАЮ УСЛОВИЯ"
+                }
+            </b>
+        </p>
+    `;
+
+
+    html += `
+        <h2>5. OOC INFORMATION</h2>
+
+        <p><b>Имя:</b> ${escapeBBCode(value("oocname"))}</p>
+
+        <p><b>Возраст:</b> ${escapeBBCode(value("oocage"))}</p>
+
+        <p><b>Опыт игры:</b> ${escapeBBCode(value("oocexp"))}</p>
+
+        <p><b>Часовой пояс:</b> ${escapeBBCode(value("oocplace"))}</p>
+
+        <p><b>VK:</b> ${escapeBBCode(value("vk"))}</p>
+
+        <p><b>G-RP:</b> ${escapeBBCode(value("grplink"))}</p>
+
+        <p><b>Discord:</b> ${escapeBBCode(value("discordlogin"))}</p>
+    `;
+
+
+    oocQuestions.forEach((q, i) => {
+
+        html += `
+            <p>
+                <b>5.${i + 8}</b>
+                ${answer("ooc_" + i)}
+                — ${q}
+            </p>
+        `;
+
+    });
+
+
+    html += `
+        <h2>5.11 ПЕРСОНАЖ</h2>
+
+        <p>
+            ${escapeBBCode(value("characterdesc"))
+                .replace(/\n/g, "<br>")}
+        </p>
+
+        <h2>5.12 СКРИНШОТ ЛК</h2>
+
+        <p>
+            ${escapeBBCode(value("lkscreen"))}
+        </p>
+
+        <h2>5.13 ДВУХФАКТОРНАЯ ЗАЩИТА</h2>
+
+        <p>
+            ${escapeBBCode(value("2fascreen"))}
+        </p>
+
+        <h2>5.14 ИНТЕРЕСНЫЕ РОЛИ</h2>
+
+        <p>
+            ${escapeBBCode(value("ss"))
+                .replace(/\n/g, "<br>")}
+        </p>
+    `;
+
+
+    document.getElementById("preview").innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   BBCode
+========================================================= */
+
+function generateBBCode() {
+
+    let b = "";
+
+    const fullname =
+        escapeBBCode(value("fullname"));
+
+    const photo =
+        value("profilePhoto");
+
+
+    b += "[CENTER]";
+
+    b += "[IMG]https://i.imgur.com/N3WoplA.png[/IMG]\n";
+
+    b += "[SIZE=6][B]";
+    b += "LOS SANTOS POLICE DEPARTMENT";
+    b += "[/B][/SIZE]\n";
+
+    b += "[SIZE=5][B]";
+    b += "PRELIMINARY BACKGROUND APPLICATION";
+    b += "[/B][/SIZE]";
+
+    b += "[/CENTER]\n";
+
+    b += "[HR][/HR]\n\n";
+
+
+    if (photo) {
+
+        b += "[CENTER]";
+
+        b += "[IMG]";
+        b += escapeBBCode(photo);
+        b += "[/IMG]";
+
+        b += "[/CENTER]\n\n";
+
+    }
+
+
+    b += "[CENTER]";
+
+    b += "[SIZE=6][B]";
+    b += fullname || "Имя Фамилия";
+    b += "[/B][/SIZE]\n";
+
+    b += "[SIZE=2](ПОЛНОЕ ИМЯ)[/SIZE]";
+
+    b += "[/CENTER]\n\n";
+
+
+    /* PERSONAL */
+
+    b += "[HEADING=2]";
+    b += "1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ";
+    b += "[/HEADING]\n";
+
+
+    const personal = [
+
+        ["1.1", "Пол", value("sex")],
+
+        ["1.2", "Возраст", value("age")],
+
+        ["1.3", "Дата рождения", value("bdate")],
+
+        ["1.4", "Номер моб. телефона", value("tnumber")],
+
+        ["1.5", "Гражданство, подданство, резидентство", value("citizenship")],
+
+        ["1.6", "Этническая группа / раса", value("race")],
+
+        ["1.7", "Образование", value("education")],
+
+        ["1.8", "Место рождения", value("badress")],
+
+        ["1.9", "Адрес проживания", value("ladress")],
+
+        ["1.10", "Адрес электронной почты", value("email")],
+
+        ["1.11", "Номер соц. страхования", value("ssnumber")]
+
+    ];
+
+
+    personal.forEach(row => {
+
+        b += "[B]";
+        b += row[0];
+        b += "[/B] ";
+
+        b += "[COLOR=#555]";
+        b += escapeBBCode(row[1]);
+        b += ":[/COLOR] ";
+
+        b += escapeBBCode(row[2]) || "—";
+
+        b += "\n";
+
+    });
+
+
+    b += "\n";
+
+
+    /* CRIMINAL */
+
+    b += "[HEADING=2]";
+    b += "2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ";
+    b += "[/HEADING]\n";
+
+
+    criminalQuestions.forEach((q, i) => {
+
+        b += "[B]2.";
+        b += i + 1;
+        b += "[/B] ";
+
+        b += "[B]";
+        b += answer("criminal_" + i);
+        b += "[/B] — ";
+
+        b += escapeBBCode(q);
+
+        b += "\n";
+
+    });
+
+
+    b += "\n";
+
+
+    /* LICENSE */
+
+    b += "[HEADING=2]";
+    b += "3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ";
+    b += "[/HEADING]\n";
+
+
+    licenseQuestions.forEach((q, i) => {
+
+        b += "[B]3.";
+        b += i + 1;
+        b += "[/B] ";
+
+        b += "[B]";
+        b += answer("license_" + i);
+        b += "[/B] — ";
+
+        b += escapeBBCode(q);
+
+        b += "\n";
+
+    });
+
+
+    b += "\n";
+
+
+    /* DECLARATION */
+
+    b += "[HEADING=2]";
+    b += "4. ДЕКЛАРАЦИЯ АБИТУРИЕНТА";
+    b += "[/HEADING]\n";
+
+    b += "[JUSTIFY]";
+
+    b += "Я подтверждаю, что вся информация, указанная ";
+    b += "в данном заявлении, является достоверной. ";
+
+    b += "Я понимаю, что предоставление ложной информации ";
+    b += "может стать причиной отклонения заявки. ";
+
+    b += "Я даю согласие на обработку своих персональных данных.";
+
+    b += "[/JUSTIFY]\n\n";
+
+
+    b += "[B]";
+
+    b += document.getElementById("accept1").checked
+        ? "✓ Я ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ"
+        : "✗ Я НЕ ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ";
+
+    b += "[/B]\n\n";
+
+
+    /* OOC */
+
+    b += "[HEADING=2]";
+    b += "5. OUT OF CHARACTER INFORMATION";
+    b += "[/HEADING]\n";
+
+
+    const ooc = [
+
+        ["5.1", "Имя", value("oocname")],
+
+        ["5.2", "Возраст", value("oocage")],
+
+        ["5.3", "Опыт игры", value("oocexp")],
+
+        ["5.4", "Место жительства / часовой пояс", value("oocplace")],
+
+        ["5.5", "VK", value("vk")],
+
+        ["5.6", "Форумный аккаунт G-RP", value("grplink")],
+
+        ["5.7", "Discord логин", value("discordlogin")]
+
+    ];
+
+
+    ooc.forEach(row => {
+
+        b += "[B]";
+        b += row[0];
+        b += "[/B] ";
+
+        b += "[COLOR=#555]";
+        b += row[1];
+        b += ":[/COLOR] ";
+
+        b += escapeBBCode(row[2]) || "—";
+
+        b += "\n";
+
+    });
+
+
+    oocQuestions.forEach((q, i) => {
+
+        b += "[B]5.";
+        b += i + 8;
+        b += "[/B] ";
+
+        b += "[B]";
+        b += answer("ooc_" + i);
+        b += "[/B] — ";
+
+        b += escapeBBCode(q);
+
+        b += "\n";
+
+    });
+
+
+    b += "\n";
+
+
+    /* CHARACTER */
+
+    b += "[B]5.11[/B] ";
+    b += "Что вы собираетесь играть во фракции? ";
+    b += "Чем ваш персонаж отличается от других?\n";
+
+    b += "[QUOTE]";
+    b += escapeBBCode(value("characterdesc")) || "—";
+    b += "[/QUOTE]\n\n";
+
+
+    b += "[B]5.12[/B] ";
+    b += "Полный скриншот личного кабинета:\n";
+
+    b += "[QUOTE]";
+    b += escapeBBCode(value("lkscreen")) || "—";
+    b += "[/QUOTE]\n\n";
+
+
+    b += "[B]5.13[/B] ";
+    b += "Полный скриншот двухфакторной защиты:\n";
+
+    b += "[QUOTE]";
+    b += escapeBBCode(value("2fascreen")) || "—";
+    b += "[/QUOTE]\n\n";
+
+
+    b += "[B]5.14[/B] ";
+    b += "Интересные роли за историю игры:\n";
+
+    b += "[SPOILER]";
+
+    b += escapeBBCode(value("ss")) || "—";
+
+    b += "[/SPOILER]\n\n";
+
+
+    /* FOOTER */
+
+    b += "[HR][/HR]\n";
+
+    b += "[CENTER]";
+
+    b += "[B][SIZE=5]";
+    b += "\" TO PROTECT AND TO SERVE \"";
+    b += "[/SIZE][/B]\n";
+
+    b += "[IMG]";
+    b += "https://i.imgur.com/dPpHP8M.png";
+    b += "[/IMG]";
+
+    b += "[/CENTER]";
+
+
+    document.getElementById("bbcode").value =
+        b;
+
+}
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+async function copyBBCode() {
+
+    const textarea =
+        document.getElementById("bbcode");
+
+    if (!textarea.value) {
+
+        generateBBCode();
+
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(
+            textarea.value
+        );
+
+        toast("BBCode скопирован");
+
+    } catch {
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        toast("BBCode скопирован");
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetForm() {
+
+    if (
+        !confirm(
+            "Очистить всю анкету?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "input[type=text], input[type=email], input[type=number], textarea"
+        )
+        .forEach(el => {
+
+            el.value = "";
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "input[type=checkbox]"
+        )
+        .forEach(el => {
+
+            el.checked = false;
+
+        });
+
+
+    document
+        .querySelectorAll(
+            'input[type=radio][value="Да"]'
+        )
+        .forEach(el => {
+
+            el.checked = true;
+
+        });
+
+
+    currentStep = 1;
+
+    showStep(1);
+
+    toast("Анкета очищена");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function toast(message) {
+
+    const el =
+        document.getElementById("toast");
+
+    el.textContent =
+        message;
+
+    el.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(() => {
+
+            el.classList.remove("show");
+
+        }, 1800);
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+showStep(1);
+
+updateProgress();
+
 </script>
-<div id="toast" class="toast">Готово</div>
+
 </body>
 </html>
