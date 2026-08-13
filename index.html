@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LSPD Application — XenForo BBCode Generator</title>
+<style>
+:root{
+  --bg:#07111f;
+  --bg2:#0b1728;
+  --card:rgba(15,28,47,.82);
+  --card2:rgba(18,34,56,.92);
+  --text:#edf5ff;
+  --muted:#91a5bd;
+  --line:rgba(148,176,205,.16);
+  --accent:#5aa9ff;
+  --accent2:#2877c7;
+  --green:#35d39a;
+  --danger:#ff6b7a;
+  --shadow:0 22px 70px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font:14px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(52,133,211,.18),transparent 32%),
+    radial-gradient(circle at 90% 10%,rgba(67,91,190,.13),transparent 28%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.25;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 18px 120px;position:relative}
+.hero{
+  position:relative;overflow:hidden;
+  padding:30px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(26,65,103,.92),rgba(10,25,43,.86));
+  box-shadow:var(--shadow);
+}
+.hero:after{
+  content:"LSPD";
+  position:absolute;right:-15px;bottom:-48px;
+  font-size:150px;font-weight:900;letter-spacing:-10px;
+  color:rgba(255,255,255,.035);
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 10px;border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;background:rgba(255,255,255,.06);
+  color:#cce6ff;font-size:11px;font-weight:800;letter-spacing:.12em;
+}
+.badge:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.hero h1{margin:13px 0 4px;font-size:30px;letter-spacing:-.7px}
+.hero p{margin:0;color:#afc4da}
+.progress{
+  margin-top:22px;height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden
+}
+.progress > div{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--accent),#78c4ff);transition:width .35s ease}
+.progressText{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#8fa8c1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{
+  background:linear-gradient(180deg,rgba(18,34,55,.9),rgba(10,23,40,.88));
+  border:1px solid var(--line);border-radius:18px;padding:20px;
+  box-shadow:0 12px 45px rgba(0,0,0,.18);
+  backdrop-filter:blur(14px);
+}
+.card.full{grid-column:1/-1}
+.card:hover{border-color:rgba(90,169,255,.24)}
+h2{
+  display:flex;align-items:center;gap:10px;
+  margin:0 0 17px;padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+  color:#dcecff;font-size:16px;letter-spacing:.1px
+}
+h2:before{
+  content:"";width:4px;height:19px;border-radius:8px;
+  background:var(--accent);box-shadow:0 0 15px rgba(90,169,255,.45)
+}
+h3{font-size:13px;color:#b9d0e8;margin:20px 0 9px}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:block;font-weight:700;margin-bottom:6px;color:#c9d8e8;font-size:12px}
+input,select,textarea{
+  width:100%;border:1px solid rgba(146,171,198,.18);
+  border-radius:10px;padding:10px 11px;
+  font:inherit;background:rgba(4,13,24,.58);color:var(--text);
+  transition:border-color .18s,box-shadow .18s,background .18s,transform .18s
+}
+input::placeholder,textarea::placeholder{color:#5f738b}
+input:hover,textarea:hover{background:rgba(4,13,24,.72)}
+input:focus,select:focus,textarea:focus{
+  outline:0;border-color:rgba(90,169,255,.7);
+  box-shadow:0 0 0 3px rgba(90,169,255,.11)
+}
+textarea{min-height:100px;resize:vertical}
+.q{
+  padding:12px 0;border-bottom:1px solid rgba(148,176,205,.09);
+  transition:padding .2s,background .2s
+}
+.q:last-child{border-bottom:0}
+.q b{font-size:13px;color:#d8e5f2}
+.q:hover{background:rgba(255,255,255,.018);padding-left:7px;padding-right:7px;border-radius:9px}
+.checks{display:flex;gap:8px;margin-top:8px}
+.checks label{
+  display:inline-flex;align-items:center;gap:7px;margin:0;
+  padding:6px 11px;border:1px solid var(--line);border-radius:8px;
+  cursor:pointer;font-weight:700;color:#8ea6bd;background:rgba(255,255,255,.025)
+}
+.checks label:has(input:checked){
+  color:#dff1ff;border-color:rgba(90,169,255,.45);background:rgba(90,169,255,.1)
+}
+.checks input{width:auto;accent-color:var(--accent)}
+.output{
+  min-height:500px;font:12px/1.6 "JetBrains Mono",Consolas,Monaco,monospace;
+  color:#cfe3f7;background:#050d18;border-color:rgba(90,169,255,.14)
+}
+.hint{color:var(--muted);font-size:12px;margin-top:8px}
+.ok{color:var(--green);font-weight:800}
+.actions{
+  position:sticky;bottom:14px;display:flex;gap:9px;justify-content:center;
+  margin:18px 0;z-index:20;padding:9px;
+  border:1px solid var(--line);border-radius:15px;
+  background:rgba(7,17,31,.78);backdrop-filter:blur(18px);
+  box-shadow:0 15px 45px rgba(0,0,0,.25)
+}
+button{
+  border:1px solid transparent;border-radius:10px;padding:11px 17px;
+  font-weight:800;cursor:pointer;color:#fff;transition:.18s;
+  font-size:13px
+}
+button:hover{transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+.primary{
+  background:linear-gradient(135deg,#3f9cf0,#246eb9);
+  box-shadow:0 8px 22px rgba(45,129,205,.25)
+}
+.primary:hover{filter:brightness(1.08)}
+.secondary{background:rgba(255,255,255,.055);border-color:var(--line);color:#c8d7e7}
+.secondary:hover{background:rgba(255,255,255,.09)}
+.toast{
+  position:fixed;right:18px;bottom:18px;z-index:100;
+  padding:11px 15px;border:1px solid rgba(53,211,154,.25);
+  background:rgba(11,35,31,.94);color:#baf6df;border-radius:10px;
+  box-shadow:var(--shadow);transform:translateY(20px);opacity:0;
+  pointer-events:none;transition:.25s
+}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:850px){
+  .grid{grid-template-columns:1fr}.card.full{grid-column:auto}
+  .row{grid-template-columns:1fr}
+  .hero h1{font-size:24px}
+  .actions{flex-wrap:wrap}
+  button{flex:1;min-width:145px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>LOS SANTOS POLICE DEPARTMENT</h1>
+    <p>Генератор анкеты для XenForo • заполняешь поля → получаешь готовый BBCode → копируешь на форум.</p>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="progressText"><span id="progressLabel">Заполнено 0%</span><span>Анкета LSPD</span></div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>1. Персональная информация</h2>
+      <div class="row">
+        <div><label>Полное имя</label><input id="fullname"></div>
+        <div><label>Фото профиля (URL)</label><input id="profilePhoto"></div>
+        <div><label>Пол</label><input id="sex"></div>
+        <div><label>Возраст</label><input id="age" type="number"></div>
+        <div><label>Дата рождения</label><input id="bdate"></div>
+        <div><label>Номер телефона</label><input id="tnumber"></div>
+        <div><label>Гражданство / резидентство</label><input id="citizenship"></div>
+        <div><label>Этническая группа / раса</label><input id="race"></div>
+        <div><label>Образование</label><input id="education"></div>
+        <div><label>Место рождения</label><input id="badress"></div>
+        <div><label>Адрес проживания</label><input id="ladress"></div>
+        <div><label>E-mail</label><input id="email" type="email"></div>
+        <div><label>Номер соц. страхования</label><input id="ssnumber"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Уголовные правонарушения</h2>
+      <div id="criminal"></div>
+      <h2 style="margin-top:20px">3. Лицензии и разрешения</h2>
+      <div id="licenses"></div>
+    </section>
+
+    <section class="card">
+      <h2>4. Декларация</h2>
+      <div class="q">
+        <b>Принимаете условия заявления?</b>
+        <div class="checks">
+          <label><input type="radio" name="accept1" value="Да" checked> Да</label>
+          <label><input type="radio" name="accept1" value="Нет"> Нет</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>5. Out of Character</h2>
+      <div class="row">
+        <div><label>Имя</label><input id="oocname"></div>
+        <div><label>Возраст</label><input id="oocage" type="number"></div>
+        <div><label>Опыт игры</label><input id="oocexp"></div>
+        <div><label>Место жительства / часовой пояс</label><input id="oocplace"></div>
+        <div><label>VK</label><input id="vk"></div>
+        <div><label>Форумный аккаунт G-RP</label><input id="grplink"></div>
+        <div><label>Discord</label><input id="discordlogin"></div>
+      </div>
+
+      <h3>Дополнительные вопросы</h3>
+      <div id="oocquestions"></div>
+
+      <h3>5.11 Персонаж</h3>
+      <textarea id="characterdesc" placeholder="Что будете играть во фракции? Чем персонаж отличается от других? Планы на персонажа..."></textarea>
+
+      <h3>5.12 Скриншот личного кабинета</h3>
+      <textarea id="lkscreen" placeholder="Вставьте ссылку на полный скриншот"></textarea>
+
+      <h3>5.13 Скриншот 2FA</h3>
+      <textarea id="2fascreen" placeholder="Вставьте ссылку на полный скриншот"></textarea>
+
+      <h3>5.14 Интересные роли</h3>
+      <textarea id="ss" placeholder="Ссылки на топики / СС"></textarea>
+    </section>
+
+    <section class="card full">
+      <h2>Готовый XenForo BBCode</h2>
+      <textarea id="output" class="output" readonly></textarea>
+      <div id="status" class="hint">Нажмите «Сгенерировать BBCode».</div>
+    </section>
+  </div>
+
+  <div class="actions">
+    <button class="primary" onclick="generate()">Сгенерировать BBCode</button>
+    <button class="secondary" onclick="copyCode()">Копировать код</button>
+    <button class="secondary" onclick="clearAll()">Очистить</button>
+  </div>
+</div>
+
+<script>
+const criminalQs = [
+  "Вы или члены Вашей семьи были когда-либо арестованы/задержаны?",
+  "Вы или члены Вашей семьи когда-либо судились за нарушения ПДД?",
+  "Вы или члены Вашей семьи имели когда-либо закрытые уголовные дела?",
+  "Вы или члены Вашей семьи когда-либо были свидетелем в суде?",
+  "Брали ли у Вас когда-нибудь отпечатки ваших пальцев?"
+];
+
+const licenseQs = [
+  "У вас есть водительские права?",
+  "Были ли ваши водительские права когда-либо изъяты?",
+  "Имеются ли у Вас неоплаченные штрафы?",
+  "Получали ли вы штрафы за последние пять лет?",
+  "Были ли вы участником дорожно-транспортного происшествия?",
+  "Вы имеете лицензию на огнестрельное оружие?",
+  "Была ли ваша оружейная лицензия когда-либо изъята?"
+];
+
+const oocQs = [
+  "Вы сможете проводить на лекциях около 3-х часов?",
+  "Можете ли Вы свободно общаться в TeamSpeak3 / Discord?",
+  "Имеется ли у вас рабочий микрофон?"
+];
+
+function questionHTML(arr, prefix){
+  return arr.map((q,i)=>`
+    <div class="q">
+      <b>${i+1}. ${q}</b>
+      <div class="checks">
+        <label><input type="radio" name="${prefix}${i}" value="Да" checked> Да</label>
+        <label><input type="radio" name="${prefix}${i}" value="Нет"> Нет</label>
+      </div>
+    </div>`).join("");
+}
+document.getElementById("criminal").innerHTML = questionHTML(criminalQs,"c");
+document.getElementById("licenses").innerHTML = questionHTML(licenseQs,"l");
+document.getElementById("oocquestions").innerHTML = questionHTML(oocQs,"o");
+
+function updateProgress(){
+  const fields=[...document.querySelectorAll("input:not([type=radio]):not([type=button]), textarea")];
+  const filled=fields.filter(x=>x.value.trim()).length;
+  const pct=fields.length ? Math.round(filled/fields.length*100) : 0;
+  document.getElementById("progressBar").style.width=pct+"%";
+  document.getElementById("progressLabel").textContent="Заполнено "+pct+"%";
+}
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer=setTimeout(()=>t.classList.remove("show"),1800);
+}
+document.addEventListener("input",updateProgress);
+document.addEventListener("change",updateProgress);
+
+function val(id){return document.getElementById(id)?.value.trim() || "—"}
+function radio(name){return document.querySelector(`input[name="${name}"]:checked`)?.value || "Нет"}
+function safe(s){
+  return String(s).replace(/\[/g,"(").replace(/\]/g,")");
+}
+function line(n,label,value){return `[B]${n}[/B] [FONT=Arial]${safe(label)}[/FONT] ${safe(value)}\n`}
+
+function generate(){
+  let b = "";
+  b += "[CENTER][IMG]https://i.imgur.com/N3WoplA.png[/IMG]\n";
+  b += "[SIZE=6][B]LOS SANTOS POLICE DEPARTMENT[/B][/SIZE]\n";
+  b += "[SIZE=5][B]PRELIMINARY BACKGROUND APPLICATION[/B][/SIZE][/CENTER]\n";
+  b += "[HR][/HR]\n\n";
+
+  if(val("profilePhoto") !== "—") b += "[CENTER][IMG]"+safe(val("profilePhoto"))+"[/IMG][/CENTER]\n";
+  b += "[CENTER][SIZE=6][B]"+safe(val("fullname"))+"[/B][/SIZE]\n[SIZE=2](ПОЛНОЕ ИМЯ)[/SIZE][/CENTER]\n\n";
+
+  b += "[HEADING=2]1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ[/HEADING]\n";
+  b += line("1.1","Пол:",val("sex"));
+  b += line("1.2","Возраст:",val("age"));
+  b += line("1.3","Дата рождения:",val("bdate"));
+  b += line("1.4","Номер моб. телефона:",val("tnumber"));
+  b += line("1.5","Гражданство, подданство, резидентство:",val("citizenship"));
+  b += line("1.6","Этническая группа / раса:",val("race"));
+  b += line("1.7","Образование:",val("education"));
+  b += line("1.8","Место рождения:",val("badress"));
+  b += line("1.9","Адрес проживания:",val("ladress"));
+  b += line("1.10","Адрес электронной почты:",val("email"));
+  b += line("1.11","Номер соц. страхования:",val("ssnumber"));
+  b += "[SIZE=2][COLOR=#777777]Указанный адрес электронной почты используется для связи с муниципальными органами города Лос-Сантоса. На него могут приходить уведомления о результатах отбора и иная справочная информация.[/COLOR][/SIZE]\n\n";
+
+  b += "[HEADING=2]2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ[/HEADING]\n";
+  criminalQs.forEach((q,i)=>{ b += `[B]2.${i+1}[/B] [B]${radio("c"+i)}[/B] — ${q}\n`; });
+  b += "\n[SIZE=2][COLOR=#777777]Уголовные правонарушения включают правонарушения, состав которых классифицируется нормами уголовного права и влечёт уголовную ответственность в соответствии с действующим законодательством.[/COLOR][/SIZE]\n\n";
+
+  b += "[HEADING=2]3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ[/HEADING]\n";
+  licenseQs.forEach((q,i)=>{ b += `[B]3.${i+1}[/B] [B]${radio("l"+i)}[/B] — ${q}\n`; });
+  b += "\n";
+
+  b += "[HEADING=2]4. ДЕКЛАРАЦИЯ АБИТУРИЕНТА[/HEADING]\n";
+  b += "[JUSTIFY]Я подтверждаю, что вся информация в этом заявлении является достоверной. Я понимаю, что предоставление ложной информации может стать причиной отклонения заявки и иных последствий в соответствии с правилами сообщества. Я даю согласие на обработку своих персональных данных.[/JUSTIFY]\n";
+  b += "[B]"+radio("accept1")+" — Я принимаю условия данного заявления[/B]\n\n";
+
+  b += "[HEADING=2]5. OUT OF CHARACTER INFORMATION[/HEADING]\n";
+  b += line("5.1","Имя:",val("oocname"));
+  b += line("5.2","Возраст:",val("oocage"));
+  b += line("5.3","Опыт игры:",val("oocexp"));
+  b += line("5.4","Место жительства / часовой пояс:",val("oocplace"));
+  b += line("5.5","Ссылка на VK:",val("vk"));
+  b += line("5.6","Ссылка на форумный аккаунт G-RP:",val("grplink"));
+  b += line("5.7","Discord логин:",val("discordlogin"));
+  oocQs.forEach((q,i)=>{ b += `[B]5.${8+i}[/B] [B]${radio("o"+i)}[/B] — ${q}\n`; });
+
+  b += "\n[B]5.11[/B] Что вы собираетесь играть во фракции? Чем ваш персонаж отличается от других? Опишите будущего персонажа и планы на него:\n";
+  b += "[QUOTE]"+safe(val("characterdesc"))+"[/QUOTE]\n\n";
+  b += "[B]5.12[/B] Полный скриншот личного кабинета:\n";
+  b += "[QUOTE]"+safe(val("lkscreen"))+"[/QUOTE]\n\n";
+  b += "[B]5.13[/B] Полный скриншот двухфакторной защиты:\n";
+  b += "[QUOTE]"+safe(val("2fascreen"))+"[/QUOTE]\n\n";
+  b += "[B]5.14[/B] Ваши интересные роли за историю игры:\n";
+  b += "[SPOILER]"+safe(val("ss"))+"[/SPOILER]\n\n";
+
+  b += "[JUSTIFY]Я ознакомлен(-а) с разделом About Us и JoinLSPD. Я соглашаюсь с правилами фракции и понимаю, что заявка может быть отклонена без объяснения причин. После прохождения академии я обязуюсь изучить информацию на форуме, включая мануал и хендбук, и соблюдать правила фракции.[/JUSTIFY]\n";
+  b += "[B]"+radio("accept1")+" — Я принимаю условия данного заявления[/B]\n\n";
+  b += "[HR][/HR]\n[CENTER][B][SIZE=5]\" TO PROTECT AND TO SERVE \"[/SIZE][/B]\n[IMG]https://i.imgur.com/dPpHP8M.png[/IMG][/CENTER]";
+
+  document.getElementById("output").value = b;
+  document.getElementById("status").innerHTML = '<span class="ok">Готово. Код можно копировать и вставлять в XenForo.</span>';
+  toast("BBCode успешно сгенерирован");
+}
+
+async function copyCode(){
+  const out=document.getElementById("output");
+  if(!out.value) generate();
+  try{
+    await navigator.clipboard.writeText(out.value);
+    document.getElementById("status").innerHTML='<span class="ok">Код скопирован в буфер обмена.</span>';
+    toast("Код скопирован");
+  }catch(e){
+    out.select(); document.execCommand("copy");
+    document.getElementById("status").innerHTML='<span class="ok">Код скопирован.</span>';
+    toast("Код скопирован");
+  }
+}
+
+function clearAll(){
+  document.querySelectorAll("input[type=text],input[type=email],input[type=number],textarea").forEach(x=>x.value="");
+  document.querySelectorAll("input[type=radio]").forEach(x=>x.checked=false);
+  document.querySelectorAll('input[type=radio][value="Нет"]').forEach(x=>x.checked=true);
+  document.querySelector('input[name="accept1"][value="Да"]').checked=true;
+  document.getElementById("output").value="";
+  document.getElementById("status").textContent="Поля очищены.";
+  updateProgress(); toast("Анкета очищена");
+}
+</script>
+<div id="toast" class="toast">Готово</div>
+</body>
+</html>
