@@ -60,7 +60,6 @@ body {
 
 .sidebar {
     position: fixed;
-
     left: 0;
     top: 0;
 
@@ -1223,10 +1222,10 @@ body {
 
 
     <div class="field required">
-        <label>VK</label>
+        <label>VK и Telegram</label>
 
         <input id="vk"
-               placeholder="https://vk.com/...">
+               placeholder="VK / Telegram">
 
         <div class="field-error">
             Поле обязательно.
@@ -1296,7 +1295,7 @@ body {
 <div class="field required">
 
     <label>
-        5.11 — Что вы собираетесь играть во фракции?
+        5.11. — Что вы собираетесь играть во фракции?
     </label>
 
     <textarea id="characterdesc"
@@ -1315,7 +1314,7 @@ body {
 <div class="field required">
 
     <label>
-        5.12 — Скриншот личного кабинета
+        5.12. — Скриншот личного кабинета
     </label>
 
     <textarea id="lkscreen"
@@ -1334,7 +1333,7 @@ body {
 <div class="field required">
 
     <label>
-        5.13 — Скриншот двухфакторной защиты
+        5.13. — Скриншот двухфакторной защиты
     </label>
 
     <textarea id="twofa"
@@ -1353,7 +1352,7 @@ body {
 <div class="field required">
 
     <label>
-        5.14 — Интересные роли за историю игры
+        5.14. — Интересные роли за историю игры
     </label>
 
     <textarea id="ss"
@@ -1508,7 +1507,7 @@ const licenseQuestions = [
 
 const oocQuestions = [
 
-    "Вы сможете проводить на лекциях около 3-х часов?",
+    "Вы сможете проводить на лекциях около 2-х часов?",
 
     "Можете ли Вы свободно общаться в TeamSpeak3 / Discord?",
 
@@ -2209,19 +2208,19 @@ function generateBBCode() {
 
             b += "[B]2.";
             b += index + 1;
-            b += "[/B] ";
-
-            b += "[B]";
-            b += answer(
-                "criminal_" + index
-            );
-            b += "[/B] — ";
+            b += ".[/B] ";
 
             b += escapeBBCode(
                 question
             );
 
-            b += "\n";
+            b += " — [B]";
+
+            b += answer(
+                "criminal_" + index
+            );
+
+            b += "[/B]\n";
 
         }
     );
@@ -2244,19 +2243,19 @@ function generateBBCode() {
 
             b += "[B]3.";
             b += index + 1;
-            b += "[/B] ";
-
-            b += "[B]";
-            b += answer(
-                "license_" + index
-            );
-            b += "[/B] — ";
+            b += ".[/B] ";
 
             b += escapeBBCode(
                 question
             );
 
-            b += "\n";
+            b += " — [B]";
+
+            b += answer(
+                "license_" + index
+            );
+
+            b += "[/B]\n";
 
         }
     );
@@ -2308,7 +2307,7 @@ function generateBBCode() {
 
         ["5.4.", "Место жительства / часовой пояс", "oocplace"],
 
-        ["5.5.", "VK", "vk"],
+        ["5.5.", "VK и Telegram", "vk"],
 
         ["5.6.", "Форумный аккаунт G-RP", "grplink"],
 
@@ -2340,19 +2339,19 @@ function generateBBCode() {
 
             b += "[B]5.";
             b += index + 8;
-            b += "[/B] ";
-
-            b += "[B]";
-            b += answer(
-                "ooc_" + index
-            );
-            b += "[/B] — ";
+            b += ".[/B] ";
 
             b += escapeBBCode(
                 question
             );
 
-            b += "\n";
+            b += " — [B]";
+
+            b += answer(
+                "ooc_" + index
+            );
+
+            b += "[/B]\n";
 
         }
     );
@@ -2413,6 +2412,7 @@ function generateBBCode() {
         value("ss")
     );
     b += "[/QUOTE]\n\n";
+
 
     document.getElementById(
         "bbcode"
@@ -2511,7 +2511,9 @@ function resetForm() {
 
 
     document
-        .querySelectorAll(".field.error")
+        .querySelectorAll(
+            ".field.error"
+        )
         .forEach(el => {
 
             el.classList.remove(
