@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>LSPD Application Builder</title>
 
 <style>
@@ -15,6 +16,7 @@
     --panel: #101720;
     --panel-2: #141e29;
     --panel-3: #0c131c;
+
     --border: #263342;
     --border-light: #344456;
 
@@ -33,11 +35,17 @@
 
 body {
     margin: 0;
+
     background:
-        radial-gradient(circle at top left, rgba(42,111,177,.12), transparent 35%),
+        radial-gradient(
+            circle at top left,
+            rgba(42,111,177,.12),
+            transparent 35%
+        ),
         var(--bg);
 
     color: var(--text);
+
     font-family:
         Inter,
         -apple-system,
@@ -81,7 +89,9 @@ body {
 
 .logo {
     padding: 8px 10px 25px;
+
     border-bottom: 1px solid var(--border);
+
     margin-bottom: 20px;
 }
 
@@ -93,8 +103,11 @@ body {
 
 .logo-subtitle {
     color: var(--muted);
+
     font-size: 11px;
+
     margin-top: 4px;
+
     letter-spacing: 1px;
 }
 
@@ -106,7 +119,9 @@ body {
 
 .step {
     width: 100%;
+
     border: 0;
+
     background: transparent;
 
     color: #8090a0;
@@ -154,6 +169,7 @@ body {
     justify-content: center;
 
     background: #151f2b;
+
     border: 1px solid var(--border);
 
     font-size: 12px;
@@ -168,7 +184,9 @@ body {
 
 .step.completed .step-number {
     background: rgba(53,211,154,.12);
+
     border-color: rgba(53,211,154,.3);
+
     color: var(--green);
 }
 
@@ -187,20 +205,26 @@ body {
 
 .progress-mini {
     height: 5px;
+
     background: #18222d;
+
     border-radius: 99px;
+
     overflow: hidden;
 }
 
 .progress-mini div {
     width: 0%;
     height: 100%;
+
     background: var(--blue);
+
     transition: width .3s;
 }
 
 .progress-info {
     display: flex;
+
     justify-content: space-between;
 
     color: var(--muted);
@@ -226,6 +250,7 @@ body {
 
 .container {
     max-width: 980px;
+
     margin: auto;
 }
 
@@ -235,7 +260,9 @@ body {
 
 .topbar {
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     margin-bottom: 25px;
@@ -245,6 +272,7 @@ body {
     margin: 0;
 
     font-size: 25px;
+
     font-weight: 800;
 }
 
@@ -339,14 +367,9 @@ body {
     display: grid;
 
     grid-template-columns:
-        repeat(2, minmax(0,1fr));
+        repeat(2, minmax(0, 1fr));
 
     gap: 17px;
-}
-
-.form-grid.three {
-    grid-template-columns:
-        repeat(3, minmax(0,1fr));
 }
 
 .field.full {
@@ -366,8 +389,7 @@ body {
 }
 
 .field input,
-.field textarea,
-.field select {
+.field textarea {
     width: 100%;
 
     border: 1px solid var(--border);
@@ -388,8 +410,7 @@ body {
 }
 
 .field input:focus,
-.field textarea:focus,
-.field select:focus {
+.field textarea:focus {
     border-color: var(--blue);
 
     box-shadow:
@@ -400,6 +421,14 @@ body {
     min-height: 120px;
 
     resize: vertical;
+}
+
+.field input.error,
+.field textarea.error {
+    border-color: var(--red);
+
+    box-shadow:
+        0 0 0 3px rgba(255,102,117,.08);
 }
 
 .field small {
@@ -424,6 +453,18 @@ body {
 
 .question:last-child {
     border-bottom: 0;
+}
+
+.question.invalid {
+    padding: 16px;
+
+    margin: 8px -16px;
+
+    border: 1px solid rgba(255,102,117,.35);
+
+    border-radius: 10px;
+
+    background: rgba(255,102,117,.04);
 }
 
 .question-text {
@@ -532,6 +573,12 @@ body {
     cursor: pointer;
 }
 
+.accept.invalid {
+    border-color: var(--red);
+
+    background: rgba(255,102,117,.04);
+}
+
 .accept input {
     margin-top: 3px;
 
@@ -610,35 +657,13 @@ body {
 }
 
 /* =========================
-   PREVIEW
+   BBCODE
 ========================= */
-
-.preview {
-    background: white;
-
-    color: #20252b;
-
-    border-radius: 10px;
-
-    padding: 35px;
-
-    max-height: 650px;
-
-    overflow: auto;
-
-    line-height: 1.6;
-}
-
-.preview h1,
-.preview h2,
-.preview h3 {
-    color: #111;
-}
 
 .bbcode {
     width: 100%;
 
-    min-height: 500px;
+    min-height: 600px;
 
     padding: 17px;
 
@@ -761,8 +786,7 @@ body {
         padding: 20px 12px 50px;
     }
 
-    .form-grid,
-    .form-grid.three {
+    .form-grid {
         grid-template-columns: 1fr;
     }
 
@@ -825,6 +849,7 @@ body {
     <aside class="sidebar">
 
         <div class="logo">
+
             <div class="logo-title">
                 LOS SANTOS POLICE DEPARTMENT
             </div>
@@ -832,51 +857,69 @@ body {
             <div class="logo-subtitle">
                 APPLICATION BUILDER
             </div>
+
         </div>
+
 
         <div class="steps">
 
             <button class="step active" data-step="1">
                 <span class="step-number">01</span>
-                <span class="step-title">Персональные данные</span>
+                <span class="step-title">
+                    Персональные данные
+                </span>
             </button>
+
 
             <button class="step" data-step="2">
                 <span class="step-number">02</span>
-                <span class="step-title">Уголовные вопросы</span>
+                <span class="step-title">
+                    Уголовные вопросы
+                </span>
             </button>
+
 
             <button class="step" data-step="3">
                 <span class="step-number">03</span>
-                <span class="step-title">Лицензии</span>
+                <span class="step-title">
+                    Лицензии
+                </span>
             </button>
+
 
             <button class="step" data-step="4">
                 <span class="step-number">04</span>
-                <span class="step-title">Декларация</span>
+                <span class="step-title">
+                    Декларация
+                </span>
             </button>
+
 
             <button class="step" data-step="5">
                 <span class="step-number">05</span>
-                <span class="step-title">OOC информация</span>
+                <span class="step-title">
+                    OOC информация
+                </span>
             </button>
+
 
             <button class="step" data-step="6">
                 <span class="step-number">06</span>
-                <span class="step-title">Персонаж</span>
+                <span class="step-title">
+                    Персонаж
+                </span>
             </button>
+
 
             <button class="step" data-step="7">
                 <span class="step-number">07</span>
-                <span class="step-title">Предпросмотр</span>
-            </button>
-
-            <button class="step" data-step="8">
-                <span class="step-number">08</span>
-                <span class="step-title">Готовый BBCode</span>
+                <span class="step-title">
+                    Готовый BBCode
+                </span>
             </button>
 
         </div>
+
 
         <div class="sidebar-bottom">
 
@@ -916,6 +959,7 @@ body {
 
                 </div>
 
+
                 <div class="status">
                     LSPD APPLICATION
                 </div>
@@ -923,120 +967,208 @@ body {
             </div>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 1
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="1">
+            <section
+                class="step-page"
+                data-page="1">
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 01</small>
+                        <small>
+                            Раздел 01
+                        </small>
 
                         <h2>
                             Персональная информация
                         </h2>
 
                         <p>
-                            Заполните основные сведения о вашем персонаже.
+                            Заполните все основные сведения
+                            о вашем персонаже.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
                         <div class="form-grid">
 
                             <div class="field">
-                                <label>Полное имя</label>
-                                <input id="fullname"
-                                       placeholder="Имя Фамилия">
-                            </div>
 
-                            <div class="field">
-                                <label>Фото профиля</label>
-                                <input id="profilePhoto"
-                                       placeholder="https://...">
-                                <small>
-                                    Прямая ссылка на изображение.
-                                </small>
-                            </div>
-
-                            <div class="field">
-                                <label>Пол</label>
-                                <input id="sex"
-                                       placeholder="Мужской / Женский">
-                            </div>
-
-                            <div class="field">
-                                <label>Возраст</label>
-                                <input id="age"
-                                       type="number"
-                                       placeholder="25">
-                            </div>
-
-                            <div class="field">
-                                <label>Дата рождения</label>
-                                <input id="bdate"
-                                       placeholder="01.01.2001">
-                            </div>
-
-                            <div class="field">
-                                <label>Номер мобильного телефона</label>
-                                <input id="tnumber"
-                                       placeholder="555-0000">
-                            </div>
-
-                            <div class="field">
-                                <label>Гражданство / резидентство</label>
-                                <input id="citizenship">
-                            </div>
-
-                            <div class="field">
-                                <label>Этническая группа / раса</label>
-                                <input id="race">
-                            </div>
-
-                            <div class="field">
-                                <label>Образование</label>
-                                <input id="education"
-                                       placeholder="Los Santos University">
-                            </div>
-
-                            <div class="field">
-                                <label>Место рождения</label>
-                                <input id="badress">
-                            </div>
-
-                            <div class="field">
-                                <label>Адрес проживания</label>
-                                <input id="ladress">
-                            </div>
-
-                            <div class="field">
-                                <label>Адрес электронной почты</label>
-                                <input id="email"
-                                       type="email"
-                                       placeholder="example@email.com">
-                            </div>
-
-                            <div class="field full">
                                 <label>
-                                    Номер социального страхования
+                                    Полное имя *
                                 </label>
 
-                                <input id="ssnumber">
+                                <input
+                                    id="fullname"
+                                    type="text"
+                                    placeholder="Имя Фамилия">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Пол *
+                                </label>
+
+                                <input
+                                    id="sex"
+                                    type="text"
+                                    placeholder="Мужской / Женский">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Возраст *
+                                </label>
+
+                                <input
+                                    id="age"
+                                    type="number"
+                                    placeholder="25">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Дата рождения *
+                                </label>
+
+                                <input
+                                    id="bdate"
+                                    type="text"
+                                    placeholder="01.01.2001">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Номер мобильного телефона *
+                                </label>
+
+                                <input
+                                    id="tnumber"
+                                    type="text"
+                                    placeholder="555-0000">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Гражданство / резидентство *
+                                </label>
+
+                                <input
+                                    id="citizenship"
+                                    type="text">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Этническая группа / раса *
+                                </label>
+
+                                <input
+                                    id="race"
+                                    type="text">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Образование *
+                                </label>
+
+                                <input
+                                    id="education"
+                                    type="text"
+                                    placeholder="Los Santos University">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Место рождения *
+                                </label>
+
+                                <input
+                                    id="badress"
+                                    type="text">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Адрес проживания *
+                                </label>
+
+                                <input
+                                    id="ladress"
+                                    type="text">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Адрес электронной почты *
+                                </label>
+
+                                <input
+                                    id="email"
+                                    type="email"
+                                    placeholder="example@email.com">
+
+                            </div>
+
+
+                            <div class="field full">
+
+                                <label>
+                                    Номер социального страхования *
+                                </label>
+
+                                <input
+                                    id="ssnumber"
+                                    type="text">
+
                             </div>
 
                         </div>
 
+
                         <div class="notice">
-                            Указанный адрес электронной почты используется
-                            для связи с муниципальными органами города
-                            Лос-Сантоса и получения информации о прохождении
-                            отбора.
+
+                            Все поля данного раздела обязательны
+                            для заполнения.
+
                         </div>
 
                     </div>
@@ -1046,36 +1178,46 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 2
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="2" hidden>
+            <section
+                class="step-page"
+                data-page="2"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 02</small>
+                        <small>
+                            Раздел 02
+                        </small>
 
                         <h2>
                             Уголовные правонарушения
                         </h2>
 
                         <p>
-                            Ответьте честно на каждый вопрос.
+                            На каждый вопрос необходимо выбрать
+                            один вариант ответа.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
                         <div id="criminalQuestions"></div>
 
+
                         <div class="notice">
-                            Уголовные правонарушения включают нарушения,
-                            которые могут повлечь уголовную ответственность
-                            в соответствии с законодательством.
+
+                            Все вопросы обязательны.
+                            Нельзя продолжить, пока не будет
+                            выбран ответ на каждый вопрос.
+
                         </div>
 
                     </div>
@@ -1085,27 +1227,34 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 3
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="3" hidden>
+            <section
+                class="step-page"
+                data-page="3"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 03</small>
+                        <small>
+                            Раздел 03
+                        </small>
 
                         <h2>
                             Лицензии и разрешения
                         </h2>
 
                         <p>
-                            Информация о водительских и оружейных лицензиях.
+                            Информация о водительских и оружейных
+                            лицензиях.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
@@ -1118,59 +1267,72 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 4
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="4" hidden>
+            <section
+                class="step-page"
+                data-page="4"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 04</small>
+                        <small>
+                            Раздел 04
+                        </small>
 
                         <h2>
                             Декларация абитуриента
                         </h2>
 
                         <p>
-                            Подтверждение достоверности предоставленной
-                            информации.
+                            Подтверждение достоверности
+                            предоставленной информации.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
                         <div class="notice">
 
                             Я подтверждаю, что вся информация,
-                            указанная в данном заявлении, является
-                            достоверной.
+                            указанная в данном заявлении,
+                            является достоверной.
 
                             <br><br>
 
-                            Я понимаю, что предоставление ложной
-                            информации может привести к отклонению
-                            заявки и другим последствиям согласно
-                            правилам сообщества.
+                            Я понимаю, что предоставление
+                            ложной информации может привести
+                            к отклонению заявки и другим
+                            последствиям согласно правилам
+                            сообщества.
 
                             <br><br>
 
-                            Я даю согласие на обработку своих
-                            персональных данных.
+                            Я даю согласие на обработку
+                            предоставленных данных.
 
                         </div>
 
-                        <label class="accept">
 
-                            <input type="checkbox"
-                                   id="accept1">
+                        <label
+                            class="accept"
+                            id="acceptBlock">
+
+                            <input
+                                type="checkbox"
+                                id="accept1">
 
                             <span>
-                                Я ознакомлен(-а) с условиями заявления
-                                и принимаю их.
+
+                                Я ознакомлен(-а) с условиями
+                                заявления и принимаю их. *
+
                             </span>
 
                         </label>
@@ -1182,17 +1344,22 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 5
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="5" hidden>
+            <section
+                class="step-page"
+                data-page="5"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 05</small>
+                        <small>
+                            Раздел 05
+                        </small>
 
                         <h2>
                             Out Of Character
@@ -1204,56 +1371,111 @@ body {
 
                     </div>
 
+
                     <div class="section-body">
 
                         <div class="form-grid">
 
                             <div class="field">
-                                <label>Имя</label>
-                                <input id="oocname">
-                            </div>
 
-                            <div class="field">
-                                <label>Возраст</label>
-                                <input id="oocage"
-                                       type="number">
-                            </div>
-
-                            <div class="field">
-                                <label>Опыт игры</label>
-                                <input id="oocexp"
-                                       placeholder="2 года">
-                            </div>
-
-                            <div class="field">
                                 <label>
-                                    Место жительства / часовой пояс
+                                    Имя *
                                 </label>
-                                <input id="oocplace"
-                                       placeholder="Москва / GMT+3">
+
+                                <input
+                                    id="oocname"
+                                    type="text">
+
                             </div>
 
-                            <div class="field">
-                                <label>VK</label>
-                                <input id="vk"
-                                       placeholder="https://vk.com/...">
-                            </div>
 
                             <div class="field">
-                                <label>Форумный аккаунт G-RP</label>
-                                <input id="grplink">
+
+                                <label>
+                                    Возраст *
+                                </label>
+
+                                <input
+                                    id="oocage"
+                                    type="number">
+
                             </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Опыт игры *
+                                </label>
+
+                                <input
+                                    id="oocexp"
+                                    type="text"
+                                    placeholder="2 года">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Место жительства / часовой пояс *
+                                </label>
+
+                                <input
+                                    id="oocplace"
+                                    type="text"
+                                    placeholder="Москва / GMT+3">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    VK *
+                                </label>
+
+                                <input
+                                    id="vk"
+                                    type="text"
+                                    placeholder="https://vk.com/...">
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label>
+                                    Форумный аккаунт G-RP *
+                                </label>
+
+                                <input
+                                    id="grplink"
+                                    type="text">
+
+                            </div>
+
 
                             <div class="field full">
-                                <label>Discord логин</label>
-                                <input id="discordlogin">
+
+                                <label>
+                                    Discord логин *
+                                </label>
+
+                                <input
+                                    id="discordlogin"
+                                    type="text">
+
                             </div>
 
                         </div>
 
+
                         <h3>
                             Дополнительные вопросы
                         </h3>
+
 
                         <div id="oocQuestions"></div>
 
@@ -1264,28 +1486,33 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 6
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="6" hidden>
+            <section
+                class="step-page"
+                data-page="6"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 06</small>
+                        <small>
+                            Раздел 06
+                        </small>
 
                         <h2>
                             Персонаж и материалы
                         </h2>
 
                         <p>
-                            Опишите будущую роль и приложите необходимые
-                            материалы.
+                            Заполните все необходимые материалы.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
@@ -1293,50 +1520,69 @@ body {
 
                             <label>
                                 5.11 — Что вы собираетесь играть
-                                во фракции?
+                                во фракции? *
                             </label>
 
-                            <textarea id="characterdesc"
-                                      placeholder="Опишите персонажа, его характер, особенности, историю и планы развития..."></textarea>
+                            <textarea
+                                id="characterdesc"
+                                placeholder="Опишите персонажа, его характер, особенности, историю и планы развития..."></textarea>
 
                         </div>
 
+
                         <br>
+
 
                         <div class="field">
 
                             <label>
-                                5.12 — Скриншот личного кабинета
+                                5.12 — Скриншот личного кабинета *
                             </label>
 
-                            <textarea id="lkscreen"
-                                      placeholder="Ссылка на полный скриншот личного кабинета..."></textarea>
+                            <textarea
+                                id="lkscreen"
+                                placeholder="Ссылка на полный скриншот личного кабинета..."></textarea>
 
                         </div>
 
+
                         <br>
+
 
                         <div class="field">
 
                             <label>
-                                5.13 — Скриншот двухфакторной защиты
+                                5.13 — Скриншот двухфакторной защиты *
                             </label>
 
-                            <textarea id="2fascreen"
-                                      placeholder="Ссылка на скриншот 2FA..."></textarea>
+                            <textarea
+                                id="2fascreen"
+                                placeholder="Ссылка на скриншот 2FA..."></textarea>
 
                         </div>
 
+
                         <br>
+
 
                         <div class="field">
 
                             <label>
-                                5.14 — Интересные роли за историю игры
+                                5.14 — Интересные роли
+                                за историю игры *
                             </label>
 
-                            <textarea id="ss"
-                                      placeholder="Ссылки на топики, СС и другие интересные роли..."></textarea>
+                            <textarea
+                                id="ss"
+                                placeholder="Ссылки на топики, СС и другие интересные роли..."></textarea>
+
+                        </div>
+
+
+                        <div class="notice">
+
+                            Все четыре пункта обязательны
+                            для отправки заявления.
 
                         </div>
 
@@ -1347,76 +1593,50 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  STEP 7
-            ====================================================== -->
+            ========================== -->
 
-            <section class="step-page" data-page="7" hidden>
-
-                <div class="section-card">
-
-                    <div class="section-header">
-
-                        <small>Раздел 07</small>
-
-                        <h2>
-                            Предпросмотр
-                        </h2>
-
-                        <p>
-                            Проверьте анкету перед генерацией BBCode.
-                        </p>
-
-                    </div>
-
-                    <div class="section-body">
-
-                        <div class="preview"
-                             id="preview">
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================================================
-                 STEP 8
-            ====================================================== -->
-
-            <section class="step-page" data-page="8" hidden>
+            <section
+                class="step-page"
+                data-page="7"
+                hidden>
 
                 <div class="section-card">
 
                     <div class="section-header">
 
-                        <small>Раздел 08</small>
+                        <small>
+                            Раздел 07
+                        </small>
 
                         <h2>
                             Готовый XenForo BBCode
                         </h2>
 
                         <p>
-                            Скопируйте код и вставьте его в редактор
-                            вашего форума.
+                            Код генерируется автоматически после
+                            прохождения полной проверки анкеты.
                         </p>
 
                     </div>
+
 
                     <div class="section-body">
 
                         <textarea
                             id="bbcode"
                             class="bbcode"
-                            readonly>
-                        </textarea>
+                            readonly
+                            placeholder="Готовый BBCode появится здесь..."></textarea>
+
 
                         <br><br>
 
-                        <button class="btn primary"
-                                onclick="copyBBCode()">
+
+                        <button
+                            class="btn primary"
+                            onclick="copyBBCode()">
 
                             Копировать BBCode
 
@@ -1429,9 +1649,9 @@ body {
             </section>
 
 
-            <!-- =====================================================
+            <!-- =========================
                  NAVIGATION
-            ====================================================== -->
+            ========================== -->
 
             <div class="navigation">
 
@@ -1447,6 +1667,7 @@ body {
 
                 </div>
 
+
                 <div class="nav-right">
 
                     <button
@@ -1457,6 +1678,7 @@ body {
                         ← Назад
 
                     </button>
+
 
                     <button
                         class="btn primary"
@@ -1478,7 +1700,10 @@ body {
 </div>
 
 
-<div class="toast" id="toast"></div>
+<div
+    class="toast"
+    id="toast">
+</div>
 
 
 <script>
@@ -1536,19 +1761,29 @@ const oocQuestions = [
    CREATE QUESTIONS
 ========================================================= */
 
-function createQuestions(container, questions, prefix) {
+function createQuestions(
+    container,
+    questions,
+    prefix
+) {
 
-    const el = document.getElementById(container);
+    const el =
+        document.getElementById(container);
 
     el.innerHTML = "";
 
+
     questions.forEach((question, index) => {
 
-        const number = index + 1;
+        const number =
+            index + 1;
+
 
         el.innerHTML += `
 
-            <div class="question">
+            <div
+                class="question"
+                data-question="${prefix}${index}">
 
                 <div class="question-text">
 
@@ -1557,6 +1792,7 @@ function createQuestions(container, questions, prefix) {
 
                 </div>
 
+
                 <div class="answers">
 
                     <label class="answer">
@@ -1564,10 +1800,11 @@ function createQuestions(container, questions, prefix) {
                         <input
                             type="radio"
                             name="${prefix}${index}"
-                            value="Да"
-                            checked>
+                            value="Да">
 
-                        <span>Да</span>
+                        <span>
+                            Да
+                        </span>
 
                     </label>
 
@@ -1579,7 +1816,9 @@ function createQuestions(container, questions, prefix) {
                             name="${prefix}${index}"
                             value="Нет">
 
-                        <span>Нет</span>
+                        <span>
+                            Нет
+                        </span>
 
                     </label>
 
@@ -1600,11 +1839,13 @@ createQuestions(
     "criminal_"
 );
 
+
 createQuestions(
     "licenseQuestions",
     licenseQuestions,
     "license_"
 );
+
 
 createQuestions(
     "oocQuestions",
@@ -1619,7 +1860,7 @@ createQuestions(
 
 let currentStep = 1;
 
-const totalSteps = 8;
+const totalSteps = 7;
 
 
 const titles = {
@@ -1655,21 +1896,21 @@ const titles = {
     ],
 
     7: [
-        "Предпросмотр",
-        "Проверка анкеты перед публикацией"
-    ],
-
-    8: [
         "Готовый BBCode",
-        "Код для вставки на XenForo"
+        "Готовый код для XenForo"
     ]
 
 };
 
 
+/* =========================================================
+   SHOW STEP
+========================================================= */
+
 function showStep(step) {
 
     currentStep = step;
+
 
     document
         .querySelectorAll(".step-page")
@@ -1688,10 +1929,12 @@ function showStep(step) {
             const buttonStep =
                 Number(button.dataset.step);
 
+
             button.classList.toggle(
                 "active",
                 buttonStep === step
             );
+
 
             button.classList.toggle(
                 "completed",
@@ -1701,38 +1944,31 @@ function showStep(step) {
         });
 
 
-    document.getElementById("pageTitle").textContent =
+    document.getElementById("pageTitle")
+        .textContent =
         titles[step][0];
 
-    document.getElementById("pageDescription").textContent =
+
+    document.getElementById("pageDescription")
+        .textContent =
         titles[step][1];
 
 
-    document.getElementById("backBtn").style.visibility =
-        step === 1 ? "hidden" : "visible";
+    document.getElementById("backBtn")
+        .style.visibility =
+        step === 1
+            ? "hidden"
+            : "visible";
 
 
-    document.getElementById("nextBtn").textContent =
+    document.getElementById("nextBtn")
+        .textContent =
         step === totalSteps
-            ? "Обновить BBCode"
+            ? "Сгенерировать BBCode"
             : "Далее →";
 
 
     updateProgress();
-
-
-    if (step === 7) {
-
-        buildPreview();
-
-    }
-
-
-    if (step === 8) {
-
-        generateBBCode();
-
-    }
 
 
     window.scrollTo({
@@ -1744,10 +1980,282 @@ function showStep(step) {
 
 
 /* =========================================================
+   VALIDATION
+========================================================= */
+
+function validateForm() {
+
+    let valid = true;
+
+    const errors = [];
+
+
+    /*
+        Убираем старые ошибки
+    */
+
+    document
+        .querySelectorAll(".error")
+        .forEach(el => {
+
+            el.classList.remove("error");
+
+        });
+
+
+    document
+        .querySelectorAll(".question.invalid")
+        .forEach(el => {
+
+            el.classList.remove("invalid");
+
+        });
+
+
+    document
+        .querySelectorAll(".accept.invalid")
+        .forEach(el => {
+
+            el.classList.remove("invalid");
+
+        });
+
+
+    /*
+        Проверяем все обычные поля
+    */
+
+    const fields =
+        document.querySelectorAll(
+            "input[type='text'], " +
+            "input[type='email'], " +
+            "input[type='number'], " +
+            "textarea"
+        );
+
+
+    fields.forEach(field => {
+
+        if (!field.value.trim()) {
+
+            valid = false;
+
+            field.classList.add("error");
+
+
+            const label =
+                field
+                    .closest(".field")
+                    ?.querySelector("label")
+                    ?.textContent
+                    ?.replace("*", "")
+                    ?.trim()
+                    || field.id;
+
+
+            errors.push(label);
+
+        }
+
+    });
+
+
+    /*
+        Проверяем группы radio
+    */
+
+    const radioNames =
+        new Set();
+
+
+    document
+        .querySelectorAll("input[type='radio']")
+        .forEach(radio => {
+
+            radioNames.add(
+                radio.name
+            );
+
+        });
+
+
+    radioNames.forEach(name => {
+
+        const selected =
+            document.querySelector(
+                `input[name="${name}"]:checked`
+            );
+
+
+        if (!selected) {
+
+            valid = false;
+
+
+            const question =
+                document.querySelector(
+                    `[data-question="${name}"]`
+                );
+
+
+            if (question) {
+
+                question.classList.add(
+                    "invalid"
+                );
+
+            }
+
+
+            errors.push(
+                "Не выбран ответ на один из вопросов"
+            );
+
+        }
+
+    });
+
+
+    /*
+        Проверяем декларацию
+    */
+
+    const declaration =
+        document.getElementById("accept1");
+
+
+    if (!declaration.checked) {
+
+        valid = false;
+
+
+        document
+            .getElementById("acceptBlock")
+            .classList.add("invalid");
+
+
+        errors.push(
+            "Необходимо принять декларацию"
+        );
+
+    }
+
+
+    /*
+        Если есть ошибки
+    */
+
+    if (!valid) {
+
+        toast(
+            "Заполните все обязательные пункты"
+        );
+
+
+        /*
+            Переходим к первой странице,
+            где есть ошибка
+        */
+
+        findFirstInvalidStep();
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   FIND FIRST INVALID STEP
+========================================================= */
+
+function findFirstInvalidStep() {
+
+    const pages =
+        document.querySelectorAll(
+            ".step-page"
+        );
+
+
+    for (const page of pages) {
+
+        const pageNumber =
+            Number(page.dataset.page);
+
+
+        /*
+            Обычные поля
+        */
+
+        const emptyField =
+            page.querySelector(
+                "input[type='text'].error, " +
+                "input[type='email'].error, " +
+                "input[type='number'].error, " +
+                "textarea.error"
+            );
+
+
+        /*
+            Radio
+        */
+
+        const invalidQuestion =
+            page.querySelector(
+                ".question.invalid"
+            );
+
+
+        /*
+            Declaration
+        */
+
+        const invalidDeclaration =
+            page.querySelector(
+                ".accept.invalid"
+            );
+
+
+        if (
+            emptyField ||
+            invalidQuestion ||
+            invalidDeclaration
+        ) {
+
+            showStep(pageNumber);
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
    NAVIGATION
 ========================================================= */
 
 function nextStep() {
+
+    /*
+        Проверяем ВСЮ анкету перед переходом.
+        Это гарантирует, что нельзя дойти до BBCode
+        с незаполненными полями.
+    */
+
+    if (!validateForm()) {
+
+        return;
+
+    }
+
 
     if (currentStep < totalSteps) {
 
@@ -1755,11 +2263,35 @@ function nextStep() {
 
         showStep(currentStep);
 
-    } else {
+
+        /*
+            На последнем шаге
+            сразу создаём BBCode.
+        */
+
+        if (currentStep === totalSteps) {
+
+            generateBBCode();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+        Если уже на последнем шаге,
+        повторно проверяем и генерируем.
+    */
+
+    if (validateForm()) {
 
         generateBBCode();
 
-        toast("BBCode обновлён");
+        toast(
+            "BBCode успешно обновлён"
+        );
 
     }
 
@@ -1779,6 +2311,10 @@ function previousStep() {
 }
 
 
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
 document
     .querySelectorAll(".step")
     .forEach(button => {
@@ -1788,7 +2324,38 @@ document
             () => {
 
                 const target =
-                    Number(button.dataset.step);
+                    Number(
+                        button.dataset.step
+                    );
+
+
+                /*
+                    Назад можно нажимать свободно.
+                */
+
+                if (target < currentStep) {
+
+                    showStep(target);
+
+                    return;
+
+                }
+
+
+                /*
+                    Вперёд — только после полной проверки.
+                */
+
+                if (target > currentStep) {
+
+                    if (!validateForm()) {
+
+                        return;
+
+                    }
+
+                }
+
 
                 showStep(target);
 
@@ -1799,7 +2366,7 @@ document
 
 
 /* =========================================================
-   HELPERS
+   VALUE
 ========================================================= */
 
 function value(id) {
@@ -1807,12 +2374,22 @@ function value(id) {
     const el =
         document.getElementById(id);
 
-    if (!el) return "";
+
+    if (!el) {
+
+        return "";
+
+    }
+
 
     return el.value.trim();
 
 }
 
+
+/* =========================================================
+   ANSWER
+========================================================= */
 
 function answer(name) {
 
@@ -1821,26 +2398,23 @@ function answer(name) {
             `input[name="${name}"]:checked`
         );
 
-    return el ? el.value : "Нет";
+
+    return el
+        ? el.value
+        : "";
 
 }
 
+
+/* =========================================================
+   ESCAPE BBCODE
+========================================================= */
 
 function escapeBBCode(text) {
 
     return String(text || "")
         .replace(/\[/g, "(")
         .replace(/\]/g, ")");
-
-}
-
-
-function questionAnswers(questions, prefix) {
-
-    return questions.map(
-        (_, index) =>
-            answer(prefix + index)
-    );
 
 }
 
@@ -1853,258 +2427,148 @@ function updateProgress() {
 
     const fields =
         document.querySelectorAll(
-            "input:not([type=radio]):not([type=checkbox]), textarea"
+            "input[type='text'], " +
+            "input[type='email'], " +
+            "input[type='number'], " +
+            "textarea"
         );
 
-    let filled = 0;
+
+    const radioGroups =
+        new Set();
+
+
+    document
+        .querySelectorAll(
+            "input[type='radio']"
+        )
+        .forEach(radio => {
+
+            radioGroups.add(
+                radio.name
+            );
+
+        });
+
+
+    const total =
+        fields.length +
+        radioGroups.size +
+        1;
+
+
+    let completed = 0;
+
 
     fields.forEach(field => {
 
         if (field.value.trim()) {
 
-            filled++;
+            completed++;
 
         }
 
     });
 
+
+    radioGroups.forEach(name => {
+
+        if (
+            document.querySelector(
+                `input[name="${name}"]:checked`
+            )
+        ) {
+
+            completed++;
+
+        }
+
+    });
+
+
+    if (
+        document.getElementById("accept1")
+            .checked
+    ) {
+
+        completed++;
+
+    }
+
+
     const percent =
         Math.round(
-            filled / fields.length * 100
+            completed / total * 100
         );
 
+
     document.getElementById("progress")
-        .style.width = percent + "%";
+        .style.width =
+        percent + "%";
+
 
     document.getElementById("progressText")
-        .textContent = percent + "%";
+        .textContent =
+        percent + "%";
 
 }
 
 
+/* =========================================================
+   LIVE INPUT
+========================================================= */
+
 document.addEventListener(
     "input",
-    updateProgress
+    () => {
+
+        updateProgress();
+
+    }
+);
+
+
+document.addEventListener(
+    "change",
+    () => {
+
+        updateProgress();
+
+    }
 );
 
 
 /* =========================================================
-   PREVIEW
-========================================================= */
-
-function buildPreview() {
-
-    const fullname =
-        escapeBBCode(value("fullname")) ||
-        "Имя Фамилия";
-
-    const photo =
-        value("profilePhoto");
-
-    let html = "";
-
-    html += `
-        <div style="
-            text-align:center;
-            border-bottom:1px solid #ddd;
-            padding-bottom:20px;
-            margin-bottom:25px;
-        ">
-
-            ${
-                photo
-                ? `<img src="${photo}"
-                        style="
-                        max-width:130px;
-                        max-height:130px;
-                        border-radius:8px;
-                        margin-bottom:10px;
-                        ">`
-                : ""
-            }
-
-            <h1>
-                LOS SANTOS POLICE DEPARTMENT
-            </h1>
-
-            <h2>
-                PRELIMINARY BACKGROUND APPLICATION
-            </h2>
-
-            <h2>
-                ${fullname}
-            </h2>
-
-        </div>
-    `;
-
-
-    html += `
-        <h2>1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ</h2>
-
-        <p><b>Пол:</b> ${escapeBBCode(value("sex"))}</p>
-
-        <p><b>Возраст:</b> ${escapeBBCode(value("age"))}</p>
-
-        <p><b>Дата рождения:</b> ${escapeBBCode(value("bdate"))}</p>
-
-        <p><b>Телефон:</b> ${escapeBBCode(value("tnumber"))}</p>
-
-        <p><b>Гражданство:</b> ${escapeBBCode(value("citizenship"))}</p>
-
-        <p><b>Раса:</b> ${escapeBBCode(value("race"))}</p>
-
-        <p><b>Образование:</b> ${escapeBBCode(value("education"))}</p>
-
-        <p><b>Место рождения:</b> ${escapeBBCode(value("badress"))}</p>
-
-        <p><b>Адрес проживания:</b> ${escapeBBCode(value("ladress"))}</p>
-
-        <p><b>E-mail:</b> ${escapeBBCode(value("email"))}</p>
-
-        <p><b>SSN:</b> ${escapeBBCode(value("ssnumber"))}</p>
-    `;
-
-
-    html += `
-        <h2>2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ</h2>
-    `;
-
-    criminalQuestions.forEach((q, i) => {
-
-        html += `
-            <p>
-                <b>2.${i + 1}</b>
-                ${answer("criminal_" + i)}
-                — ${q}
-            </p>
-        `;
-
-    });
-
-
-    html += `
-        <h2>3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ</h2>
-    `;
-
-    licenseQuestions.forEach((q, i) => {
-
-        html += `
-            <p>
-                <b>3.${i + 1}</b>
-                ${answer("license_" + i)}
-                — ${q}
-            </p>
-        `;
-
-    });
-
-
-    html += `
-        <h2>4. ДЕКЛАРАЦИЯ</h2>
-
-        <p>
-            Я подтверждаю, что вся информация в заявлении
-            является достоверной.
-        </p>
-
-        <p>
-            <b>
-                ${
-                    document.getElementById("accept1").checked
-                    ? "Я ПРИНИМАЮ УСЛОВИЯ"
-                    : "Я НЕ ПРИНИМАЮ УСЛОВИЯ"
-                }
-            </b>
-        </p>
-    `;
-
-
-    html += `
-        <h2>5. OOC INFORMATION</h2>
-
-        <p><b>Имя:</b> ${escapeBBCode(value("oocname"))}</p>
-
-        <p><b>Возраст:</b> ${escapeBBCode(value("oocage"))}</p>
-
-        <p><b>Опыт игры:</b> ${escapeBBCode(value("oocexp"))}</p>
-
-        <p><b>Часовой пояс:</b> ${escapeBBCode(value("oocplace"))}</p>
-
-        <p><b>VK:</b> ${escapeBBCode(value("vk"))}</p>
-
-        <p><b>G-RP:</b> ${escapeBBCode(value("grplink"))}</p>
-
-        <p><b>Discord:</b> ${escapeBBCode(value("discordlogin"))}</p>
-    `;
-
-
-    oocQuestions.forEach((q, i) => {
-
-        html += `
-            <p>
-                <b>5.${i + 8}</b>
-                ${answer("ooc_" + i)}
-                — ${q}
-            </p>
-        `;
-
-    });
-
-
-    html += `
-        <h2>5.11 ПЕРСОНАЖ</h2>
-
-        <p>
-            ${escapeBBCode(value("characterdesc"))
-                .replace(/\n/g, "<br>")}
-        </p>
-
-        <h2>5.12 СКРИНШОТ ЛК</h2>
-
-        <p>
-            ${escapeBBCode(value("lkscreen"))}
-        </p>
-
-        <h2>5.13 ДВУХФАКТОРНАЯ ЗАЩИТА</h2>
-
-        <p>
-            ${escapeBBCode(value("2fascreen"))}
-        </p>
-
-        <h2>5.14 ИНТЕРЕСНЫЕ РОЛИ</h2>
-
-        <p>
-            ${escapeBBCode(value("ss"))
-                .replace(/\n/g, "<br>")}
-        </p>
-    `;
-
-
-    document.getElementById("preview").innerHTML =
-        html;
-
-}
-
-
-/* =========================================================
-   BBCode
+   GENERATE BBCODE
 ========================================================= */
 
 function generateBBCode() {
 
+    /*
+        Никакого BBCode без полной анкеты.
+    */
+
+    if (!validateForm()) {
+
+        return;
+
+    }
+
+
     let b = "";
 
+
     const fullname =
-        escapeBBCode(value("fullname"));
+        escapeBBCode(
+            value("fullname")
+        );
 
-    const photo =
-        value("profilePhoto");
 
+    /* =========================
+       HEADER
+    ========================= */
 
-    b += "[CENTER]";
-
-    b += "[IMG]https://i.imgur.com/N3WoplA.png[/IMG]\n";
+    b += "[CENTER]\n";
 
     b += "[SIZE=6][B]";
     b += "LOS SANTOS POLICE DEPARTMENT";
@@ -2112,42 +2576,24 @@ function generateBBCode() {
 
     b += "[SIZE=5][B]";
     b += "PRELIMINARY BACKGROUND APPLICATION";
-    b += "[/B][/SIZE]";
+    b += "[/B][/SIZE]\n";
 
-    b += "[/CENTER]\n";
+    b += "[SIZE=4][B]";
+    b += fullname;
+    b += "[/B][/SIZE]\n";
+
+    b += "[/CENTER]\n\n";
 
     b += "[HR][/HR]\n\n";
 
 
-    if (photo) {
-
-        b += "[CENTER]";
-
-        b += "[IMG]";
-        b += escapeBBCode(photo);
-        b += "[/IMG]";
-
-        b += "[/CENTER]\n\n";
-
-    }
-
-
-    b += "[CENTER]";
-
-    b += "[SIZE=6][B]";
-    b += fullname || "Имя Фамилия";
-    b += "[/B][/SIZE]\n";
-
-    b += "[SIZE=2](ПОЛНОЕ ИМЯ)[/SIZE]";
-
-    b += "[/CENTER]\n\n";
-
-
-    /* PERSONAL */
+    /* =========================
+       PERSONAL
+    ========================= */
 
     b += "[HEADING=2]";
     b += "1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ";
-    b += "[/HEADING]\n";
+    b += "[/HEADING]\n\n";
 
 
     const personal = [
@@ -2158,9 +2604,9 @@ function generateBBCode() {
 
         ["1.3", "Дата рождения", value("bdate")],
 
-        ["1.4", "Номер моб. телефона", value("tnumber")],
+        ["1.4", "Номер мобильного телефона", value("tnumber")],
 
-        ["1.5", "Гражданство, подданство, резидентство", value("citizenship")],
+        ["1.5", "Гражданство / резидентство", value("citizenship")],
 
         ["1.6", "Этническая группа / раса", value("race")],
 
@@ -2172,7 +2618,7 @@ function generateBBCode() {
 
         ["1.10", "Адрес электронной почты", value("email")],
 
-        ["1.11", "Номер соц. страхования", value("ssnumber")]
+        ["1.11", "Номер социального страхования", value("ssnumber")]
 
     ];
 
@@ -2183,11 +2629,11 @@ function generateBBCode() {
         b += row[0];
         b += "[/B] ";
 
-        b += "[COLOR=#555]";
+        b += "[COLOR=#777777]";
         b += escapeBBCode(row[1]);
         b += ":[/COLOR] ";
 
-        b += escapeBBCode(row[2]) || "—";
+        b += escapeBBCode(row[2]);
 
         b += "\n";
 
@@ -2197,93 +2643,113 @@ function generateBBCode() {
     b += "\n";
 
 
-    /* CRIMINAL */
+    /* =========================
+       CRIMINAL
+    ========================= */
 
     b += "[HEADING=2]";
     b += "2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ";
-    b += "[/HEADING]\n";
+    b += "[/HEADING]\n\n";
 
 
-    criminalQuestions.forEach((q, i) => {
+    criminalQuestions.forEach(
+        (question, index) => {
 
-        b += "[B]2.";
-        b += i + 1;
-        b += "[/B] ";
+            b += "[B]";
+            b += "2." + (index + 1);
+            b += "[/B] ";
 
-        b += "[B]";
-        b += answer("criminal_" + i);
-        b += "[/B] — ";
+            b += escapeBBCode(question);
 
-        b += escapeBBCode(q);
+            b += "\n";
 
-        b += "\n";
+            b += "[B][COLOR=#3c9cff]";
+            b += "Ответ: ";
+            b += answer(
+                "criminal_" + index
+            );
+            b += "[/COLOR][/B]";
 
-    });
+            b += "\n\n";
+
+        }
+    );
 
 
-    b += "\n";
-
-
-    /* LICENSE */
+    /* =========================
+       LICENSES
+    ========================= */
 
     b += "[HEADING=2]";
     b += "3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ";
-    b += "[/HEADING]\n";
+    b += "[/HEADING]\n\n";
 
 
-    licenseQuestions.forEach((q, i) => {
+    licenseQuestions.forEach(
+        (question, index) => {
 
-        b += "[B]3.";
-        b += i + 1;
-        b += "[/B] ";
+            b += "[B]";
+            b += "3." + (index + 1);
+            b += "[/B] ";
 
-        b += "[B]";
-        b += answer("license_" + i);
-        b += "[/B] — ";
+            b += escapeBBCode(question);
 
-        b += escapeBBCode(q);
+            b += "\n";
 
-        b += "\n";
+            b += "[B][COLOR=#3c9cff]";
+            b += "Ответ: ";
+            b += answer(
+                "license_" + index
+            );
+            b += "[/COLOR][/B]";
 
-    });
+            b += "\n\n";
+
+        }
+    );
 
 
-    b += "\n";
-
-
-    /* DECLARATION */
+    /* =========================
+       DECLARATION
+    ========================= */
 
     b += "[HEADING=2]";
     b += "4. ДЕКЛАРАЦИЯ АБИТУРИЕНТА";
-    b += "[/HEADING]\n";
+    b += "[/HEADING]\n\n";
+
 
     b += "[JUSTIFY]";
 
-    b += "Я подтверждаю, что вся информация, указанная ";
-    b += "в данном заявлении, является достоверной. ";
+    b += "Я подтверждаю, что вся информация, ";
+    b += "указанная в данном заявлении, является ";
+    b += "достоверной.";
 
-    b += "Я понимаю, что предоставление ложной информации ";
-    b += "может стать причиной отклонения заявки. ";
+    b += "\n\n";
 
-    b += "Я даю согласие на обработку своих персональных данных.";
+    b += "Я понимаю, что предоставление ложной ";
+    b += "информации может стать причиной ";
+    b += "отклонения заявки.";
+
+    b += "\n\n";
+
+    b += "Я даю согласие на обработку ";
+    b += "предоставленных данных.";
 
     b += "[/JUSTIFY]\n\n";
 
 
-    b += "[B]";
-
-    b += document.getElementById("accept1").checked
-        ? "✓ Я ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ"
-        : "✗ Я НЕ ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ";
-
-    b += "[/B]\n\n";
+    b += "[B][COLOR=green]";
+    b += "✓ Я ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ";
+    b += "[/COLOR][/B]\n\n";
 
 
-    /* OOC */
+    /* =========================
+       OOC
+    ========================= */
 
     b += "[HEADING=2]";
     b += "5. OUT OF CHARACTER INFORMATION";
-    b += "[/HEADING]\n";
+    b += "[/HEADING]\n\n";
 
 
     const ooc = [
@@ -2311,28 +2777,11 @@ function generateBBCode() {
         b += row[0];
         b += "[/B] ";
 
-        b += "[COLOR=#555]";
-        b += row[1];
+        b += "[COLOR=#777777]";
+        b += escapeBBCode(row[1]);
         b += ":[/COLOR] ";
 
-        b += escapeBBCode(row[2]) || "—";
-
-        b += "\n";
-
-    });
-
-
-    oocQuestions.forEach((q, i) => {
-
-        b += "[B]5.";
-        b += i + 8;
-        b += "[/B] ";
-
-        b += "[B]";
-        b += answer("ooc_" + i);
-        b += "[/B] — ";
-
-        b += escapeBBCode(q);
+        b += escapeBBCode(row[2]);
 
         b += "\n";
 
@@ -2342,62 +2791,105 @@ function generateBBCode() {
     b += "\n";
 
 
-    /* CHARACTER */
+    oocQuestions.forEach(
+        (question, index) => {
 
-    b += "[B]5.11[/B] ";
-    b += "Что вы собираетесь играть во фракции? ";
-    b += "Чем ваш персонаж отличается от других?\n";
+            b += "[B]";
+            b += "5." + (index + 8);
+            b += "[/B] ";
+
+            b += escapeBBCode(question);
+
+            b += "\n";
+
+            b += "[B][COLOR=#3c9cff]";
+            b += "Ответ: ";
+            b += answer(
+                "ooc_" + index
+            );
+            b += "[/COLOR][/B]";
+
+            b += "\n\n";
+
+        }
+    );
+
+
+    /* =========================
+       CHARACTER
+    ========================= */
+
+    b += "[HEADING=2]";
+    b += "5.11 — ПЕРСОНАЖ";
+    b += "[/HEADING]\n\n";
+
+
+    b += "[B]";
+    b += "Что вы собираетесь играть во фракции?";
+    b += "[/B]\n";
 
     b += "[QUOTE]";
-    b += escapeBBCode(value("characterdesc")) || "—";
+    b += escapeBBCode(
+        value("characterdesc")
+    );
     b += "[/QUOTE]\n\n";
 
 
-    b += "[B]5.12[/B] ";
-    b += "Полный скриншот личного кабинета:\n";
+    b += "[B]";
+    b += "5.12 — СКРИНШОТ ЛИЧНОГО КАБИНЕТА";
+    b += "[/B]\n";
 
     b += "[QUOTE]";
-    b += escapeBBCode(value("lkscreen")) || "—";
+    b += escapeBBCode(
+        value("lkscreen")
+    );
     b += "[/QUOTE]\n\n";
 
 
-    b += "[B]5.13[/B] ";
-    b += "Полный скриншот двухфакторной защиты:\n";
+    b += "[B]";
+    b += "5.13 — СКРИНШОТ ДВУХФАКТОРНОЙ ЗАЩИТЫ";
+    b += "[/B]\n";
 
     b += "[QUOTE]";
-    b += escapeBBCode(value("2fascreen")) || "—";
+    b += escapeBBCode(
+        value("2fascreen")
+    );
     b += "[/QUOTE]\n\n";
 
 
-    b += "[B]5.14[/B] ";
-    b += "Интересные роли за историю игры:\n";
+    b += "[B]";
+    b += "5.14 — ИНТЕРЕСНЫЕ РОЛИ ЗА ИСТОРИЮ ИГРЫ";
+    b += "[/B]\n";
 
-    b += "[SPOILER]";
-
-    b += escapeBBCode(value("ss")) || "—";
-
-    b += "[/SPOILER]\n\n";
-
-
-    /* FOOTER */
-
-    b += "[HR][/HR]\n";
-
-    b += "[CENTER]";
-
-    b += "[B][SIZE=5]";
-    b += "\" TO PROTECT AND TO SERVE \"";
-    b += "[/SIZE][/B]\n";
-
-    b += "[IMG]";
-    b += "https://i.imgur.com/dPpHP8M.png";
-    b += "[/IMG]";
-
-    b += "[/CENTER]";
+    b += "[QUOTE]";
+    b += escapeBBCode(
+        value("ss")
+    );
+    b += "[/QUOTE]\n\n";
 
 
-    document.getElementById("bbcode").value =
-        b;
+    /* =========================
+       FOOTER
+    ========================= */
+
+    b += "[HR][/HR]\n\n";
+
+    b += "[CENTER]\n";
+
+    b += "[B][SIZE=4]";
+    b += "TO PROTECT AND TO SERVE";
+    b += "[/SIZE][/B]";
+
+    b += "\n[/CENTER]";
+
+
+    document.getElementById("bbcode")
+        .value = b;
+
+
+    toast(
+        "BBCode успешно сгенерирован"
+    );
 
 }
 
@@ -2411,11 +2903,17 @@ async function copyBBCode() {
     const textarea =
         document.getElementById("bbcode");
 
-    if (!textarea.value) {
 
-        generateBBCode();
+    if (!textarea.value.trim()) {
+
+        toast(
+            "Сначала заполните анкету"
+        );
+
+        return;
 
     }
+
 
     try {
 
@@ -2423,15 +2921,21 @@ async function copyBBCode() {
             textarea.value
         );
 
-        toast("BBCode скопирован");
+        toast(
+            "BBCode скопирован"
+        );
 
     } catch {
+
+        textarea.focus();
 
         textarea.select();
 
         document.execCommand("copy");
 
-        toast("BBCode скопирован");
+        toast(
+            "BBCode скопирован"
+        );
 
     }
 
@@ -2457,18 +2961,25 @@ function resetForm() {
 
     document
         .querySelectorAll(
-            "input[type=text], input[type=email], input[type=number], textarea"
+            "input[type='text'], " +
+            "input[type='email'], " +
+            "input[type='number'], " +
+            "textarea"
         )
         .forEach(el => {
 
             el.value = "";
+
+            el.classList.remove(
+                "error"
+            );
 
         });
 
 
     document
         .querySelectorAll(
-            "input[type=checkbox]"
+            "input[type='checkbox']"
         )
         .forEach(el => {
 
@@ -2479,20 +2990,56 @@ function resetForm() {
 
     document
         .querySelectorAll(
-            'input[type=radio][value="Да"]'
+            "input[type='radio']"
         )
         .forEach(el => {
 
-            el.checked = true;
+            el.checked = false;
 
         });
 
 
+    document
+        .querySelectorAll(
+            ".question.invalid"
+        )
+        .forEach(el => {
+
+            el.classList.remove(
+                "invalid"
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            ".accept.invalid"
+        )
+        .forEach(el => {
+
+            el.classList.remove(
+                "invalid"
+            );
+
+        });
+
+
+    document.getElementById("bbcode")
+        .value = "";
+
+
     currentStep = 1;
+
 
     showStep(1);
 
-    toast("Анкета очищена");
+    updateProgress();
+
+
+    toast(
+        "Анкета очищена"
+    );
 
 }
 
@@ -2509,21 +3056,32 @@ function toast(message) {
     const el =
         document.getElementById("toast");
 
+
     el.textContent =
         message;
 
-    el.classList.add("show");
+
+    el.classList.add(
+        "show"
+    );
 
 
-    clearTimeout(toastTimer);
+    clearTimeout(
+        toastTimer
+    );
 
 
     toastTimer =
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            el.classList.remove("show");
+                el.classList.remove(
+                    "show"
+                );
 
-        }, 1800);
+            },
+            2200
+        );
 
 }
 
