@@ -575,6 +575,71 @@ body {
     outline: none;
 }
 
+/* TOPIC TITLE ROW */
+
+.title-row {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+.title-row input {
+    flex: 1;
+
+    padding: 11px 12px;
+
+    background: var(--input);
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    color: white;
+
+    font: inherit;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+.publish-guide {
+    margin-top: 20px;
+
+    padding: 17px 19px;
+
+    background: rgba(60,156,255,.05);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    color: #c9d7e5;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.publish-guide b {
+    color: #ddecff;
+}
+
+.publish-guide ol {
+    margin: 10px 0 0;
+
+    padding-left: 20px;
+}
+
+.publish-guide li {
+    margin-bottom: 6px;
+}
+
 /* BUTTONS */
 
 .navigation {
@@ -749,6 +814,10 @@ body {
     .nav-left .btn,
     .nav-right .btn {
         flex: 1;
+    }
+
+    .title-row {
+        flex-direction: column;
     }
 }
 </style>
@@ -1393,6 +1462,25 @@ body {
 
 <div class="section-body">
 
+<label style="display:block; margin-bottom:7px; color:#c7d3df; font-size:12px; font-weight:700;">
+    Заголовок темы
+</label>
+
+<div class="title-row">
+
+    <input
+        id="topicTitle"
+        readonly>
+
+    <button class="btn primary"
+            onclick="copyTopicTitle()">
+
+        Копировать заголовок
+
+    </button>
+
+</div>
+
 <textarea
     id="bbcode"
     class="bbcode"
@@ -1406,6 +1494,20 @@ body {
     Копировать BBCode
 
 </button>
+
+<div class="publish-guide">
+
+    <b>Как опубликовать заявку:</b>
+
+    <ol>
+        <li>Проверьте, что заголовок темы выше содержит ваш игровой ник — он должен присутствовать в поле «Полное имя» на шаге 1.</li>
+        <li>Скопируйте заголовок темы кнопкой «Копировать заголовок».</li>
+        <li>Скопируйте текст BBCode кнопкой «Копировать BBCode».</li>
+        <li>Создайте новую тему в разделе академии на форуме.</li>
+        <li>Вставьте скопированный заголовок в поле названия темы, а скопированный BBCode — в тело сообщения.</li>
+    </ol>
+
+</div>
 
 </div>
 
@@ -2095,12 +2197,34 @@ document.addEventListener(
 
 
 /* =========================================================
+   GENERATE TOPIC TITLE
+========================================================= */
+
+function generateTopicTitle() {
+
+    const name = value("fullname");
+
+    const title =
+        "[POI] " + (name || "Имя Фамилия");
+
+
+    document.getElementById(
+        "topicTitle"
+    ).value = title;
+
+}
+
+
+/* =========================================================
    GENERATE BBCODE
 ========================================================= */
 
 function generateBBCode() {
 
     let b = "";
+
+
+    generateTopicTitle();
 
 
     /*
@@ -2422,7 +2546,7 @@ function generateBBCode() {
 
 
 /* =========================================================
-   COPY
+   COPY BBCODE
 ========================================================= */
 
 async function copyBBCode() {
@@ -2453,6 +2577,45 @@ async function copyBBCode() {
 
         toast(
             "BBCode скопирован"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   COPY TOPIC TITLE
+========================================================= */
+
+async function copyTopicTitle() {
+
+    const input =
+        document.getElementById(
+            "topicTitle"
+        );
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            input.value
+        );
+
+        toast(
+            "Заголовок скопирован"
+        );
+
+    } catch {
+
+        input.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        toast(
+            "Заголовок скопирован"
         );
 
     }
@@ -2534,6 +2697,11 @@ function resetForm() {
 
     document.getElementById(
         "bbcode"
+    ).value = "";
+
+
+    document.getElementById(
+        "topicTitle"
     ).value = "";
 
 
