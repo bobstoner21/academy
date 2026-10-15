@@ -5,823 +5,367 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LSPD Application Builder</title>
+<title>LSPD Academy Application</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 :root {
-    --bg: #080d14;
-    --panel: #101720;
-    --panel2: #141e29;
-    --input: #0b121b;
+    --viewer: #525659;
+    --toolbar: #323639;
+    --page: #ffffff;
+    --ink: #000000;
+    --text: #111111;
+    --muted: #555555;
+    --line: #000000;
+    --light: #bdbdbd;
+    --err: #000000;
 
-    --border: #263342;
-    --border2: #3a4b5e;
-
-    --text: #edf3f8;
-    --muted: #8998a8;
-
-    --blue: #3c9cff;
-    --green: #35d39a;
-    --red: #ff6675;
-
-    --radius: 14px;
+    --font: Arial, "Liberation Sans", Helvetica, sans-serif;
+    --typed: "Courier New", "Liberation Mono", Courier, monospace;
 }
 
 body {
     margin: 0;
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(42,111,177,.12),
-            transparent 35%
-        ),
-        var(--bg);
-
+    background: var(--viewer);
     color: var(--text);
-
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
+    font-family: var(--font);
+    font-size: 13px;
+    line-height: 1.45;
 }
 
-.app {
-    min-height: 100vh;
-    display: flex;
-}
+.app { min-height: 100vh; }
 
-/* SIDEBAR */
-
+/* ===== TOOLBAR (как в просмотрщике PDF) ===== */
 .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-
-    width: 270px;
-    height: 100vh;
-
-    background: #0b1119;
-
-    border-right: 1px solid var(--border);
-
-    padding: 24px 16px;
-
-    display: flex;
-    flex-direction: column;
-
-    z-index: 10;
+    position: sticky; top: 0; z-index: 20;
+    background: var(--toolbar);
+    color: #e8e8e8;
+    padding: 0 20px;
+    display: flex; align-items: center; gap: 24px;
+    min-height: 44px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
+.logo { padding: 0; margin: 0; border: 0; display: flex; align-items: baseline; gap: 10px; }
+.logo-title { font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+.logo-subtitle { margin: 0; color: #a8a8a8; font-size: 11px; letter-spacing: .08em; }
 
-.logo {
-    padding: 8px 10px 24px;
-
-    border-bottom: 1px solid var(--border);
-
-    margin-bottom: 20px;
-}
-
-.logo-title {
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.logo-subtitle {
-    margin-top: 5px;
-
-    color: var(--muted);
-
-    font-size: 10px;
-
-    letter-spacing: 1.2px;
-}
-
-.steps {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
+.steps { display: flex; flex-direction: row; gap: 2px; margin-left: auto; }
 .step {
-    border: 0;
-
-    background: transparent;
-
-    color: #81909f;
-
-    padding: 11px 12px;
-
-    border-radius: 10px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    cursor: pointer;
-
-    text-align: left;
+    border: 0; background: transparent; color: #b5b5b5;
+    padding: 6px 12px; border-radius: 2px;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; font: inherit; font-size: 12px;
 }
+.step:hover { background: #4a4e51; color: #fff; }
+.step.active { background: #5f6368; color: #fff; }
+.step.completed { color: #e0e0e0; }
+.step.completed .step-number::after { content: " ✓"; }
+.step-number { font-weight: 700; font-size: 12px; }
+.step-title { font-size: 12px; }
 
-.step:hover {
-    background: rgba(255,255,255,.04);
+.sidebar-bottom { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; border: 0; }
+.progress-mini { width: 90px; height: 3px; background: #5a5d60; border-radius: 0; overflow: hidden; }
+.progress-mini div { width: 0; height: 100%; background: #fff; transition: width .2s; }
+.progress-info { margin: 0; color: #b5b5b5; font-size: 11px; }
+.progress-info span:first-child { display: none; }
 
-    color: white;
-}
-
-.step.active {
-    background: rgba(60,156,255,.12);
-
-    color: white;
-}
-
-.step.completed {
-    color: #b7d8f3;
-}
-
-.step-number {
-    width: 29px;
-    height: 29px;
-
-    flex-shrink: 0;
-
-    border-radius: 8px;
-
-    background: #151f2b;
-
-    border: 1px solid var(--border);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.step.active .step-number {
-    background: var(--blue);
-
-    border-color: var(--blue);
-
-    color: white;
-}
-
-.step.completed .step-number {
-    background: rgba(53,211,154,.1);
-
-    border-color: rgba(53,211,154,.3);
-
-    color: var(--green);
-}
-
-.step-title {
-    font-size: 12px;
-
-    font-weight: 650;
-}
-
-.sidebar-bottom {
-    margin-top: auto;
-
-    padding: 18px 8px 0;
-
-    border-top: 1px solid var(--border);
-}
-
-.progress-mini {
-    height: 5px;
-
-    background: #18222d;
-
-    border-radius: 99px;
-
-    overflow: hidden;
-}
-
-.progress-mini div {
-    width: 0;
-
-    height: 100%;
-
-    background: var(--blue);
-
-    transition: .25s;
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-
-    margin-top: 8px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-}
-
-/* MAIN */
-
-.main {
-    width: calc(100% - 270px);
-
-    margin-left: 270px;
-
-    min-height: 100vh;
-
-    padding: 35px 45px;
-}
-
+/* ===== PAGE (лист А4) ===== */
+.main { width: 100%; margin: 0; min-height: 0; padding: 28px 16px 60px; }
 .container {
-    max-width: 980px;
-
-    margin: auto;
+    max-width: 794px;
+    margin: 0 auto;
+    background: var(--page);
+    padding: 44px 52px 36px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.55);
 }
 
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 25px;
+    display: block;
+    text-align: center;
+    margin: 0 0 22px; padding: 0 0 14px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
 }
-
 .topbar h1 {
     margin: 0;
-
-    font-size: 25px;
+    font-size: 19px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
 }
-
-.topbar p {
-    margin: 6px 0 0;
-
-    color: var(--muted);
-
-    font-size: 13px;
-}
-
+.topbar p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .status {
-    padding: 7px 11px;
-
-    border-radius: 99px;
-
-    background: rgba(53,211,154,.07);
-
-    border: 1px solid rgba(53,211,154,.2);
-
-    color: #8ceac5;
-
-    font-size: 10px;
-
-    font-weight: 800;
+    position: absolute; right: 0; top: 0;
+    padding: 0; border: 0; background: none; border-radius: 0;
+    color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em;
 }
 
-/* CARD */
-
-.section-card {
-    background: var(--panel);
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    overflow: hidden;
-
-    box-shadow: 0 20px 60px rgba(0,0,0,.2);
-}
+/* ===== SECTIONS ===== */
+.section-card { background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
 
 .section-header {
-    padding: 25px 28px;
-
-    border-bottom: 1px solid var(--border);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(60,156,255,.06),
-            transparent
-        );
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 6px 10px; margin: 0 0 16px;
+    background: var(--ink); border: 0;
 }
-
 .section-header small {
-    color: var(--blue);
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.2px;
-
-    text-transform: uppercase;
+    color: #cfcfcf; font-size: 10px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
 }
-
 .section-header h2 {
-    margin: 6px 0 0;
+    margin: 0; color: #fff;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase;
+}
+.section-header p { display: none; }
 
-    font-size: 21px;
+.section-body { padding: 0; }
+.section-body h3 {
+    margin: 28px 0 14px; padding: 4px 0;
+    border-bottom: 1px solid var(--ink);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase;
 }
 
-.section-header p {
-    margin: 7px 0 0;
-
-    color: var(--muted);
-
-    font-size: 13px;
-}
-
-.section-body {
-    padding: 28px;
-}
-
-/* FORM */
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(0,1fr));
-
-    gap: 17px;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
+/* ===== FIELDS (подчёркнутые строки) ===== */
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px 28px; }
+.full { grid-column: 1 / -1; }
 
 .field label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #c7d3df;
-
-    font-size: 12px;
-
-    font-weight: 700;
+    display: block; margin: 0 0 1px;
+    color: var(--muted); font-size: 10.5px; font-weight: 700;
+    letter-spacing: .03em; text-transform: uppercase;
 }
-
-.field input,
-.field textarea,
-.field select {
-    width: 100%;
-
-    padding: 11px 12px;
-
-    background: var(--input);
-
-    border: 1px solid var(--border);
-
-    border-radius: 9px;
-
-    outline: none;
-
-    color: white;
-
-    font: inherit;
-
-    transition: .15s;
+.field input, .field textarea, .field select {
+    width: 100%; padding: 4px 2px 3px;
+    background: transparent;
+    border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+    outline: none; color: var(--ink);
+    font-family: var(--typed); font-size: 14px; font-weight: 700;
+    transition: background .1s;
 }
-
-.field input:focus,
-.field textarea:focus,
-.field select:focus {
-    border-color: var(--blue);
-
-    box-shadow: 0 0 0 3px rgba(60,156,255,.08);
+.field input::placeholder, .field textarea::placeholder {
+    color: #b0b0b0; font-weight: 400;
 }
-
+.field input:focus, .field textarea:focus, .field select:focus {
+    background: #f1f1f1;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 2px;
+}
 .field textarea {
-    min-height: 130px;
-
-    resize: vertical;
-}
-
-/* ERROR */
-
-.field.error input,
-.field.error textarea,
-.field.error select {
-    border-color: var(--red);
-}
-
-.field-error {
-    display: none;
-
-    margin-top: 5px;
-
-    color: var(--red);
-
-    font-size: 11px;
-}
-
-.field.error .field-error {
-    display: block;
-}
-
-/* QUESTIONS */
-
-.question {
-    padding: 16px 0;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.question:first-child {
-    padding-top: 0;
-}
-
-.question-text {
-    color: #dce5ed;
-
-    font-size: 13px;
-
-    font-weight: 650;
-
+    min-height: 90px; resize: vertical;
+    border: 1px solid var(--line); padding: 6px 8px;
     line-height: 1.5;
 }
+.field textarea:focus { padding: 5px 7px; border: 2px solid var(--ink); }
+.field-stack { margin-top: 16px; }
 
-.answers {
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: 10px;
+.field.error label { color: var(--err); text-decoration: underline; }
+.field.error input, .field.error textarea, .field.error select {
+    background: #e9e9e9; border-bottom: 2px dashed var(--ink);
 }
-
-.answer input {
-    display: none;
+.field.error textarea { border: 2px dashed var(--ink); }
+.field-error {
+    display: none; margin-top: 3px;
+    color: var(--ink); font-size: 11px; font-weight: 700;
 }
+.field.error .field-error { display: block; }
+.field-error::before { content: "▲ "; }
 
+/* ===== QUESTIONS (чекбоксы) ===== */
+.question {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    padding: 9px 0; border-bottom: 1px solid var(--light);
+}
+.question:first-child { padding-top: 0; }
+.question:last-child { border-bottom: 0; }
+.question-text { flex: 1; color: var(--text); font-size: 13px; font-weight: 400; line-height: 1.4; }
+
+.answers { display: flex; gap: 18px; margin: 0; flex-shrink: 0; }
+.answer { display: flex; align-items: center; cursor: pointer; }
+.answer input { display: none; }
 .answer span {
-    display: block;
-
-    padding: 7px 17px;
-
-    background: #0c141e;
-
-    border: 1px solid var(--border);
-
-    border-radius: 8px;
-
-    color: var(--muted);
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    padding: 0; background: none; border: 0; border-radius: 0;
+    color: var(--text); font-size: 13px; font-weight: 700; cursor: pointer;
 }
-
-.answer input:checked + span {
-    background: rgba(60,156,255,.12);
-
-    border-color: var(--blue);
-
-    color: #ddecff;
+.answer span::before {
+    content: "";
+    width: 15px; height: 15px; flex-shrink: 0;
+    border: 1.5px solid var(--ink); background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; line-height: 1; font-weight: 700;
 }
-
-/* NOTICE */
+.answer input:checked + span { background: none; border: 0; color: var(--ink); }
+.answer input:checked + span::before {
+    content: "✕";
+}
 
 .notice {
-    margin-top: 20px;
-
-    padding: 15px 17px;
-
-    background: #0c141d;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    color: var(--muted);
-
-    font-size: 12px;
-
-    line-height: 1.6;
+    margin: 18px 0 0; padding: 8px 12px;
+    background: none; border: 1px solid var(--ink); border-radius: 0;
+    color: var(--text); font-size: 12px; line-height: 1.5;
 }
 
-/* CHECKBOX */
-
-.accept {
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 20px;
-
-    padding: 15px;
-
-    background: rgba(60,156,255,.04);
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    cursor: pointer;
-}
-
-.accept.error {
-    border-color: var(--red);
-}
-
-.accept input {
-    margin-top: 3px;
-
-    accent-color: var(--blue);
-}
-
-.accept span {
-    font-size: 13px;
-
-    color: #c9d7e5;
-}
-
-/* BBCode */
-
-#resultBlock {
-    margin-top: 25px;
-}
-
+/* ===== BBCODE ===== */
 .bbcode {
-    width: 100%;
-
-    min-height: 600px;
-
-    padding: 17px;
-
-    background: #070c12;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    color: #cce3f7;
-
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
-
-    font-size: 12px;
-
-    line-height: 1.55;
-
-    resize: vertical;
-
-    outline: none;
+    width: 100%; min-height: 560px; padding: 10px;
+    background: #fff; border: 1px solid var(--ink); border-radius: 0;
+    color: var(--ink);
+    font-family: var(--typed); font-size: 12px; line-height: 1.5; font-weight: 400;
+    resize: vertical; outline: none;
 }
-
-/* TOPIC TITLE ROW */
-
-.title-row {
-    display: flex;
-
-    gap: 8px;
-
-    margin-bottom: 16px;
-}
-
+.title-row { display: flex; gap: 8px; margin-bottom: 14px; }
 .title-row input {
-    flex: 1;
-
-    padding: 11px 12px;
-
-    background: var(--input);
-
-    border: 1px solid var(--border);
-
-    border-radius: 9px;
-
-    outline: none;
-
-    color: white;
-
-    font: inherit;
-
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
+    flex: 1; padding: 8px 10px;
+    background: #fff; border: 1px solid var(--ink); border-radius: 0;
+    outline: none; color: var(--ink);
+    font-family: var(--typed); font-size: 13px; font-weight: 700;
+}
+.label-sm {
+    display: block; margin: 0 0 4px;
+    color: var(--muted); font-size: 10.5px; font-weight: 700;
+    letter-spacing: .03em; text-transform: uppercase;
 }
 
 .publish-guide {
-    margin-top: 20px;
-
-    padding: 17px 19px;
-
-    background: rgba(60,156,255,.05);
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    color: #c9d7e5;
-
-    font-size: 13px;
-
-    line-height: 1.7;
+    margin-top: 20px; padding: 10px 14px;
+    background: none; border: 1px solid var(--ink); border-radius: 0;
+    color: var(--text); font-size: 12px; line-height: 1.6;
 }
+.publish-guide b { text-transform: uppercase; letter-spacing: .05em; }
+.publish-guide ol { margin: 8px 0 0; padding-left: 18px; }
+.publish-guide li { margin-bottom: 4px; }
 
-.publish-guide b {
-    color: #ddecff;
-}
-
-.publish-guide ol {
-    margin: 10px 0 0;
-
-    padding-left: 20px;
-}
-
-.publish-guide li {
-    margin-bottom: 6px;
-}
-
-/* BUTTONS */
-
+/* ===== BUTTONS ===== */
 .navigation {
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-top: 17px;
+    display: flex; justify-content: space-between;
+    margin-top: 30px; padding-top: 14px;
+    border-top: 1px solid var(--ink);
 }
-
-.nav-right,
-.nav-left {
-    display: flex;
-
-    gap: 9px;
-}
-
+.nav-right, .nav-left { display: flex; gap: 8px; }
 .btn {
-    padding: 10px 16px;
+    padding: 8px 16px; border-radius: 0;
+    border: 1px solid var(--ink); background: #fff; color: var(--ink);
+    font-family: var(--font); font-size: 12px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+}
+.btn:hover { background: #e4e4e4; }
+.btn.primary { background: var(--ink); color: #fff; }
+.btn.primary:hover { background: #333; }
+.btn.danger { border-color: var(--light); color: var(--muted); }
+.btn.danger:hover { border-color: var(--ink); color: var(--ink); background: #fff; }
 
-    border-radius: 9px;
+/* ===== TOAST ===== */
+.toast {
+    position: fixed; right: 20px; bottom: 20px;
+    padding: 10px 16px; border-radius: 0;
+    background: #000; color: #fff; border: 0;
+    font-size: 12px; font-weight: 700;
+    opacity: 0; transform: translateY(10px); pointer-events: none;
+    transition: opacity .15s, transform .15s; z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
 
-    border: 1px solid var(--border);
+[hidden] { display: none !important; }
 
-    background: #111a24;
+/* ===== MOBILE ===== */
+@media (max-width: 850px) {
+    .sidebar { flex-wrap: wrap; gap: 6px 12px; padding: 8px 12px; }
+    .steps { margin-left: 0; width: 100%; overflow-x: auto; order: 3; }
+    .step { flex-shrink: 0; padding: 6px 10px; }
+    .step-title { display: none; }
+    .sidebar-bottom { margin-left: auto; }
+    .main { padding: 12px 8px 40px; }
+    .container { padding: 24px 18px 24px; }
+    .status { display: none; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .full { grid-column: auto; }
+    .question { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+@media (max-width: 500px) {
+    .logo-subtitle { display: none; }
+    .navigation { flex-direction: column-reverse; gap: 10px; }
+    .nav-left, .nav-right { width: 100%; }
+    .nav-left .btn, .nav-right .btn { flex: 1; }
+    .title-row { flex-direction: column; }
+    .section-header { flex-direction: column; gap: 2px; }
+}
 
-    color: #c7d4df;
+/* ===== ДОКУМЕНТ: белая страница, без панелей ===== */
+body { background: #fff; }
+.sidebar { display: none; }
+.main { padding: 36px 20px 70px; }
+.container { max-width: 780px; padding: 0; box-shadow: none; background: none; }
 
-    font: inherit;
+.topbar { margin-bottom: 26px; padding-bottom: 12px; border-bottom: 2px solid #000; }
+.topbar .doc-logo { display: block; width: 96px; height: auto; margin: 0 auto 12px; }
+.topbar h1 { font-size: 20px; letter-spacing: .07em; }
+.topbar p { margin-top: 5px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.status { display: none; }
 
-    font-size: 12px;
+@media (max-width: 850px) {
+    .main { padding: 20px 14px 50px; }
+}
 
-    font-weight: 750;
+/* ===== масштаб крупнее ===== */
+.container { zoom: 1.08; }
 
+@media (max-width: 1100px) { .container { zoom: 1; } }
+@media (max-width: 850px)  { .container { zoom: 1; } }
+
+.main { padding-top: 20px; padding-bottom: 30px; }
+
+
+/* ===== чекбоксы-галочки как в бланке ===== */
+.answer span::before {
+    width: 16px; height: 16px;
+    border: 0; border-radius: 3px;
+    background: #d3d8dd; color: #fff;
+    font-size: 12px; font-weight: 700;
+}
+.answer input:checked + span::before { content: "\2713"; background: #2f8fdd; }
+
+.accept {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 18px; padding: 8px 12px;
+    background: none; border: 1px solid #000; border-radius: 0;
     cursor: pointer;
 }
-
-.btn:hover {
-    border-color: var(--border2);
-
-    color: white;
+.accept.error { border: 2px dashed #000; background: #ececec; }
+.accept input {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; margin: 0; flex-shrink: 0;
+    border-radius: 3px; background: #d3d8dd;
+    display: grid; place-content: center; cursor: pointer;
 }
+.accept input:checked { background: #2f8fdd; }
+.accept input:checked::after { content: "\2713"; color: #fff; font-size: 12px; font-weight: 700; line-height: 1; }
+.accept span { font-size: 13px; color: #111; }
+.field{margin:0 0 14px}.txt{white-space:pre-line;font-size:12px;line-height:1.5;margin:0 0 14px}
+.opts{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:4px}
+.field .opts label{display:flex;margin:0;font-size:13px;text-transform:none;letter-spacing:0;color:var(--text)}
+.sigbox canvas{display:block;width:100%;max-width:420px;height:auto;border-bottom:1px solid #000;margin:4px 0 8px}
+.sigbar{display:flex;gap:8px;margin:0 0 12px}.sigbar select{font:inherit;padding:6px 8px;border:1px solid #000;background:#fff}
 
-.btn.primary {
-    background: var(--blue);
-
-    border-color: var(--blue);
-
-    color: white;
+/* ===== СЕРЫЙ ФОН У ПОЛЕЙ ВВОДА ===== */
+.field input[data-k], .field textarea[data-k] {
+    background: #ebebeb;
+    padding: 6px 8px 5px;
+    border-bottom: 1px solid var(--line);
 }
-
-.btn.danger {
-    color: #ff8994;
+.field textarea[data-k] { padding: 6px 8px; }
+.field input[data-k]:focus, .field textarea[data-k]:focus {
+    background: #dedede;
+    padding: 6px 8px 4px;
 }
-
-/* TOAST */
-
-.toast {
-    position: fixed;
-
-    right: 25px;
-    bottom: 25px;
-
-    padding: 12px 17px;
-
-    border-radius: 10px;
-
-    background: #152333;
-
-    border: 1px solid #30465c;
-
-    color: white;
-
-    opacity: 0;
-
-    transform: translateY(20px);
-
-    pointer-events: none;
-
-    transition: .2s;
-
-    z-index: 100;
+.field textarea[data-k]:focus { padding: 5px 7px; }
+.field input[data-k]:read-only, .field textarea[data-k]:read-only {
+    background: #d6d6d6; color: #666; cursor: not-allowed;
 }
-
-.toast.show {
-    opacity: 1;
-
-    transform: translateY(0);
-}
-
-/* MOBILE */
-
-@media(max-width:850px) {
-
-    .sidebar {
-        position: relative;
-
-        width: 100%;
-        height: auto;
-
-        min-height: auto;
-
-        border-right: 0;
-
-        border-bottom: 1px solid var(--border);
-    }
-
-    .app {
-        display: block;
-    }
-
-    .main {
-        width: 100%;
-
-        margin: 0;
-
-        padding: 20px 12px 50px;
-    }
-
-    .steps {
-        display: grid;
-
-        grid-template-columns: repeat(4,1fr);
-    }
-
-    .step {
-        justify-content: center;
-    }
-
-    .step-title {
-        display: none;
-    }
-
-    .sidebar-bottom {
-        display: none;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .full {
-        grid-column: auto;
-    }
-}
-
-@media(max-width:500px) {
-
-    .steps {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-    .step {
-        justify-content: flex-start;
-    }
-
-    .step-title {
-        display: block;
-    }
-
-    .navigation {
-        flex-direction: column-reverse;
-
-        gap: 10px;
-    }
-
-    .nav-left,
-    .nav-right {
-        width: 100%;
-    }
-
-    .nav-left .btn,
-    .nav-right .btn {
-        flex: 1;
-    }
-
-    .title-row {
-        flex-direction: column;
-    }
-}
+.field.error input[data-k], .field.error textarea[data-k] { background: #e0e0e0; }
+.opts input:disabled + span { opacity: .45; cursor: not-allowed; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Herr+Von+Muellerhoff&family=Marck+Script&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -904,15 +448,11 @@ body {
 <div class="container">
 
 <div class="topbar">
-
+    <img class="doc-logo" src="https://i.imgur.com/tJxXQFt.png" alt="">
     <div>
-        <h1 id="pageTitle">
-            Персональные данные
-        </h1>
+        <h1 id="pageTitle">Los Santos Police Department</h1>
 
-        <p id="pageDescription">
-            Основная информация кандидата
-        </p>
+        <p id="pageDescription">Preliminary Background Application</p>
     </div>
 
     <div class="status">
@@ -922,529 +462,12 @@ body {
 </div>
 
 
-<!-- STEP 1 -->
-
-<section class="step-page" data-page="1">
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 01</small>
-
-    <h2>Персональная информация</h2>
-
-    <p>
-        Заполните все поля.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div class="form-grid">
-
-    <div class="field required">
-        <label>Полное имя</label>
-
-        <input id="fullname"
-               placeholder="Имя Фамилия">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Пол</label>
-
-        <input id="sex"
-               placeholder="Мужской / Женский">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Возраст</label>
-
-        <input id="age"
-               type="number"
-               min="1"
-               placeholder="25">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Дата рождения</label>
-
-        <input id="bdate"
-               placeholder="01.01.2001">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Номер мобильного телефона</label>
-
-        <input id="tnumber"
-               placeholder="555-0000">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Гражданство / резидентство</label>
-
-        <input id="citizenship">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Этническая группа / раса</label>
-
-        <input id="race">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Образование</label>
-
-        <input id="education"
-               placeholder="Los Santos University">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Место рождения</label>
-
-        <input id="badress">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Адрес проживания</label>
-
-        <input id="ladress">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Адрес электронной почты</label>
-
-        <input id="email"
-               type="email"
-               placeholder="example@email.com">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required full">
-        <label>Номер социального страхования</label>
-
-        <input id="ssnumber">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-</div>
-
-<div class="notice">
-    Все поля данного раздела обязательны.
-</div>
-
-</div>
-</div>
-
-</section>
-
-
-<!-- STEP 2 -->
-
-<section class="step-page"
-         data-page="2"
-         hidden>
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 02</small>
-
-    <h2>Уголовные правонарушения</h2>
-
-    <p>
-        Ответьте на каждый вопрос.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div id="criminalQuestions"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- STEP 3 -->
-
-<section class="step-page"
-         data-page="3"
-         hidden>
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 03</small>
-
-    <h2>Лицензии и разрешения</h2>
-
-    <p>
-        Ответьте на каждый вопрос.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div id="licenseQuestions"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- STEP 4 -->
-
-<section class="step-page"
-         data-page="4"
-         hidden>
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 04</small>
-
-    <h2>Декларация</h2>
-
-    <p>
-        Подтверждение достоверности информации.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div class="notice">
-
-    Я подтверждаю, что вся информация,
-    указанная в данном заявлении,
-    является достоверной.
-
-    <br><br>
-
-    Я понимаю, что предоставление ложной
-    информации может привести к отклонению
-    заявки.
-
-    <br><br>
-
-    Я даю согласие на обработку
-    персональных данных.
-
-</div>
-
-
-<label class="accept" id="acceptBlock">
-
-    <input type="checkbox"
-           id="accept1">
-
-    <span>
-        Я ознакомлен(-а) с условиями заявления
-        и принимаю их.
-    </span>
-
-</label>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- STEP 5 -->
-
-<section class="step-page"
-         data-page="5"
-         hidden>
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 05</small>
-
-    <h2>Out Of Character</h2>
-
-    <p>
-        Информация об игроке.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div class="form-grid">
-
-    <div class="field required">
-        <label>Имя</label>
-
-        <input id="oocname">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Возраст</label>
-
-        <input id="oocage"
-               type="number">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Опыт игры</label>
-
-        <input id="oocexp"
-               placeholder="На каких серверах играли, в каких фракциях">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Место жительства / часовой пояс</label>
-
-        <input id="oocplace"
-               placeholder="Москва / GMT+3">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>VK и Telegram</label>
-
-        <input id="vk"
-               placeholder="VK / Telegram">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required">
-        <label>Форумный аккаунт G-RP</label>
-
-        <input id="grplink">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-
-    <div class="field required full">
-        <label>Discord логин</label>
-
-        <input id="discordlogin">
-
-        <div class="field-error">
-            Поле обязательно.
-        </div>
-    </div>
-
-</div>
-
-
-<h3>
-    Дополнительные вопросы
-</h3>
-
-<div id="oocQuestions"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- STEP 6 -->
-
-<section class="step-page"
-         data-page="6"
-         hidden>
-
-<div class="section-card">
-
-<div class="section-header">
-
-    <small>Раздел 06</small>
-
-    <h2>Персонаж и материалы</h2>
-
-    <p>
-        Все поля обязательны.
-    </p>
-
-</div>
-
-<div class="section-body">
-
-<div class="field required">
-
-    <label>
-        5.11. — Что вы собираетесь играть во фракции?
-    </label>
-
-    <textarea id="characterdesc"
-              placeholder="Опишите персонажа, его характер, историю и планы развития..."></textarea>
-
-    <div class="field-error">
-        Поле обязательно.
-    </div>
-
-</div>
-
-
-<br>
-
-
-<div class="field required">
-
-    <label>
-        5.12. — Скриншот личного кабинета
-    </label>
-
-    <textarea id="lkscreen"
-              placeholder="Ссылка на скриншот личного кабинета..."></textarea>
-
-    <div class="field-error">
-        Поле обязательно.
-    </div>
-
-</div>
-
-
-<br>
-
-
-<div class="field required">
-
-    <label>
-        5.13. — Скриншот двухфакторной защиты
-    </label>
-
-    <textarea id="twofa"
-              placeholder="Ссылка на скриншот 2FA..."></textarea>
-
-    <div class="field-error">
-        Поле обязательно.
-    </div>
-
-</div>
-
-
-<br>
-
-
-<div class="field required">
-
-    <label>
-        5.14. — Интересные роли за историю игры
-    </label>
-
-    <textarea id="ss"
-              placeholder="Ссылки на топики, СС и другие интересные роли..."></textarea>
-
-    <div class="field-error">
-        Поле обязательно.
-    </div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
+<div id="pages"></div>
 
 <!-- STEP 7 -->
 
 <section class="step-page"
-         data-page="7"
+         data-page="11"
          hidden>
 
 <div class="section-card">
@@ -1463,7 +486,7 @@ body {
 
 <div class="section-body">
 
-<label style="display:block; margin-bottom:7px; color:#c7d3df; font-size:12px; font-weight:700;">
+<label style="display:block; margin-bottom:7px; color:#555; font-size:12px; font-weight:700;">
     Заголовок темы
 </label>
 
@@ -1501,7 +524,7 @@ body {
     <b>Как опубликовать заявку:</b>
 
     <ol>
-        <li>Проверьте, что заголовок темы выше содержит ваш игровой ник — он должен присутствовать в поле «Полное имя» на шаге 1.</li>
+        <li>Проверьте заголовок темы выше и при необходимости поправьте его по требованиям форума.</li>
         <li>Скопируйте заголовок темы кнопкой «Копировать заголовок».</li>
         <li>Скопируйте текст BBCode кнопкой «Копировать BBCode».</li>
         <li>Создайте новую тему в разделе академии на форуме.</li>
@@ -1569,1205 +592,335 @@ body {
 
 
 <script>
-
-/* =========================================================
-   QUESTIONS
-========================================================= */
-
-const criminalQuestions = [
-
-    "Вы или члены Вашей семьи были когда-либо арестованы/задержаны?",
-
-    "Вы или члены Вашей семьи когда-либо судились за нарушения ПДД?",
-
-    "Вы или члены Вашей семьи имели когда-либо закрытые уголовные дела?",
-
-    "Вы или члены Вашей семьи когда-либо были свидетелем в суде?",
-
-    "Брали ли у Вас когда-нибудь отпечатки ваших пальцев?"
-
+const O=s=>s.split("|"),YN="Да|Нет",GD="Мужской|Женский|Другой",ND="Н/Д";
+/* 6-й элемент у поля = номер вопроса Да/Нет, от которого оно зависит:
+   «Да» -> поле обязательно, «Нет» -> автоматически «Н/Д» */
+const S=[
+{h:"1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ",i:[
+["t","1.1","Фамилия"],["t","1.2","Имя"],["t","1.3","Отчество / второе имя",ND],["t","1.4","Номер телефона"],
+["t","1.5","Дата рождения","","10/ИЮН/2001"],["r","1.6","Пол:",O(GD)],["t","1.7","Адрес"],
+["t","1.8","Город","Los Santos"],["t","1.9","Штат","San Andreas"],
+["r","1.10","Гражданство / резидентство:",O("Я гражданин США|Я постоянный резидент (иностранец) и подал(-а) заявление на гражданство США|Ничего из перечисленного")],
+["r","1.11","Этническая группа / раса (отметьте только один вариант)",O("Чернокожий|Латиноамериканец|Азиат / Тихоокеанский островитянин|Европеоид|Индеец|Филиппинец|Выходец с Ближнего Востока")],
+["t","1.12","Рост (фут/дюйм)","","6'1"],["t","1.13","Вес (фунты)","","194 lbs"],
+["i","1.14","Предоставьте фотографию на паспорт. На фото должны быть видны лицо анфас и плечи. На фото не должно быть головных уборов, очков и любых предметов, закрывающих лицо. Прикрепите фото в правой верхней части этого раздела.","","Ссылка на фото (необязательно)"]]},
+{h:"2. ОБРАЗОВАНИЕ",i:[
+["r","2.1","Какой у вас наивысший уровень образования? (отметьте только один вариант)",O("Неоконченное высшее|Степень ассоциата|Степень бакалавра|Магистратура / аспирантура|Среднее образование и/или GED|Ни одно из утверждений об образовании ко мне не относится")],
+["r","2.2.1","Если вы учились в колледже, какая у вас была основная специальность?",O("Уголовное правосудие|Бизнес / Экономика|Общее образование / Не определился|Инженерия / Информатика|Коммуникации|Психология / Социология|Гуманитарные науки|Педагогика|Естественные науки|Другое")],
+["h","2.2.2","Если «Другое», укажите вашу специальность."],["t","","Предмет",ND,"","2.2.1=Другое"],
+["r","2.3","Если вы служили в армии, укажите род войск. (отметьте только один вариант)",O("Армия|Военно-морской флот|Военно-воздушные силы|Морская пехота|Береговая охрана")],
+["r","2.4","Можете ли вы эффективно и свободно общаться на английском языке?",O(YN)],
+["c","2.5.1","Какими языками, помимо английского, вы свободно владеете?",O("Испанский|Хинди|Арабский|Португальский|Бенгальский|Русский|Китайский|Тагальский|Японский|Голландский|Панджаби/Лахнда|Сербский|Вьетнамский|Армянский|Корейский|Персидский|Другой")],
+["h","2.5.2","Если «Другой», какими языками, помимо английского, вы свободно владеете?"],
+["t","","Язык 1",ND,"","2.5.1=Другой"],["t","","Язык 2",ND,"","2.5.1=Другой|opt"]]},
+{h:"3. ОПЫТ РАБОТЫ И ТРУДОУСТРОЙСТВО",i:[
+["p","","Опыт работы и трудоустройство включает организации и учреждения, в которых вы работали на добровольной или оплачиваемой основе. Их необходимо указывать отдельно, при необходимости добавляя дополнительные поля;"],
+["h","3.1","Предыдущее место работы:"],["t","3.1.1","Название компании"],["t","3.1.2","Характер работы"],["a","3.1.3","Причина увольнения"],
+["t","3.1.4","Работодатель (если применимо)",ND],["t","3.1.5","Звание (если применимо)",ND],["t","3.1.6","Должность (если применимо)"],["t","3.1.7","Срок работы","","19/07/2026 - 13/08/2026"],
+]},
+{h:"4. МЕДИЦИНСКАЯ ИСТОРИЯ",i:[
+["r","4.1.1","Есть ли у вас диагностированное физическое или психическое заболевание?",O(YN)],
+["t","4.1.2","Если да: описание заболевания",ND,"","4.1.1"]]},
+{h:"5. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ",i:[
+["r","5.1.1","Есть ли у вас действующие водительские права Сан-Андреас?",O(YN)],
+["r","5.1.2","Приостанавливалось ли действие ваших водительских прав?",O(YN),"","5.1.1=Да"],
+["r","5.1.3","Лишались ли вы когда-либо водительских прав?",O(YN),"","5.1.1=Да"],
+["r","5.2.1","Есть ли у вас лицензия на управление воздушными судами?",O(YN)],
+["r","5.2.2","Лишались ли вы когда-либо лицензии на управление воздушными судами?",O(YN),"","5.2.1=Да"],
+["r","5.3.1","Есть ли у вас лицензия на огнестрельное оружие?",O(YN)],
+["c","5.3.2","Укажите все действующие оружейные лицензии, которые у вас есть.",O("Лицензия на личное огнестрельное оружие (PF)|Лицензия на скрытое ношение (CCW)|Лицензия охранника (GuardCard)"),"","5.3.1=Да"],
+["r","5.3.3","Приостанавливалось или аннулировалось ли когда-либо действие вашей оружейной лицензии?",O(YN),"","5.3.1=Да"]]},
+{h:"6. ПРОВЕРКА БИОГРАФИИ",i:[
+["p","","Департамент полиции Лос-Сантоса проводит тщательную проверку на наличие судимостей у всех своих кандидатов. Кандидаты также обязаны сообщать Департаменту полиции Лос-Сантоса о любых судимостях или контактах с Департаментом. Невыполнение этого требования повлечёт немедленный отказ в рассмотрении заявления и возможные ограничения на подачу последующих заявлений."],
+["r","6.1","Отметьте один из следующих вариантов, который лучше всего вам подходит, исходя из тяжести:",O("У меня нет судимостей.|Я получал(-а) штрафы / предупреждения о нарушениях от правоохранительных органов Сан-Андреас, которые оплатил(-а) или которые были подтверждены в суде.|Я был(-а) арестован(-а) правоохранительными органами Сан-Андреас по обвинениям в проступках (Misdemeanour), по которым признал(-а) вину / не оспаривал(-а) обвинение или которые были подтверждены в суде.|Я был(-а) арестован(-а) правоохранительными органами Сан-Андреас по обвинениям в тяжких преступлениях (Felony), по которым признал(-а) вину / не оспаривал(-а) обвинение или которые были подтверждены в суде.")]]},
+{h:"7. ПОЧЕМУ Я ХОЧУ СТАТЬ ОФИЦЕРОМ LSPD",i:[
+["a","7.1","Почему я хочу стать офицером LSPD? (кратко, 1–3 предложения)"]]},
+{h:"8. РАЗРЕШЕНИЕ И ОТКАЗ ОТ ПРЕТЕНЗИЙ",i:[
+["p","","Подав заявление о приёме на работу в Город Лос-Сантос, я настоящим уполномочиваю на срок один год с даты подписания любого уполномоченного представителя Города, предъявившего это разрешение или его копию, получать любую информацию, касающуюся моей трудовой деятельности, кредитной истории, образования, места жительства, академической успеваемости, личных данных, результатов работы, проверок биографии, полиграфических исследований, любых внутренних расследований и дисциплинарных записей, включая любые файлы, признанные конфиденциальными и/или закрытыми. Я также разрешаю раскрытие любых записей уголовной юстиции об арестах, штрафах, задержаниях, испытательном сроке и условно-досрочном освобождении, а также полицейских отчётов. Настоящим я поручаю вам раскрывать эту информацию по требованию предъявителя. Я также разрешаю Городу делать фотокопии этих записей. Это разрешение подписывается при полном знании и понимании того, что информация предназначена для официального использования Городом Лос-Сантос. Настоящим я даю согласие на передачу Городом вышеописанной информации третьим лицам, включая, помимо прочего, соответствующие правоохранительные органы или власти, в ходе исполнения ими своих служебных обязанностей. Настоящим я признаю и соглашаюсь с тем, что отказываюсь от любого права или возможности читать или просматривать любую информацию, предоставленную в ответ на данную проверку. Я также отказываюсь от любого права или возможности читать или просматривать любой отчёт о проверке биографии, подготовленный Городом. Я также признаю и соглашаюсь с тем, что если я буду искать работу в другом правоохранительном органе (в пределах Города или за его пределами), материалы моей проверки биографии будут раскрыты этому органу исключительно для определения моей пригодности к службе в качестве офицера полиции. Я также признаю и соглашаюсь с тем, что если материалы моей проверки будут раскрыты потенциальному работодателю исключительно для такой ограниченной цели, они останутся конфиденциальными и не станут частью моего личного дела. Я также соглашаюсь, что в случае передачи этих материалов другому органу в соответствии с настоящим пунктом я отказываюсь от любого права на ознакомление с такими материалами (или любыми их резюме), находящимися у этого органа, независимо от того, как этот орган обращается с такими документами внутри себя. Настоящим я освобождаю вас, как моего работодателя, бывшего работодателя, потенциального работодателя или их представителя, а также любой полицейский орган, школу, колледж, университет или иное образовательное учреждение, кредитное бюро, кредитную организацию, агентство потребительской отчётности или торговое предприятие, включая любых их должностных лиц, сотрудников или связанный с ними персонал, как индивидуально, так и коллективно, от любой ответственности за ущерб любого рода, который может когда-либо возникнуть у меня, моих наследников или правопреемников вследствие выполнения настоящего разрешения и просьбы о раскрытии информации либо любой попытки его выполнить."],
+["p","","Я подтверждаю, что ответы, содержащиеся в данной Анкете кандидата, являются правдивыми и полными, насколько мне известно. Соглашаясь ниже, я настоящим разрешаю проверку всех утверждений, содержащихся в данной заявке на трудоустройство, в той мере, в какой это необходимо для принятия решения о приёме на работу. Я настоящим понимаю и признаю, что, если иное не определено применимым законодательством, любые трудовые отношения с данной организацией носят характер «at will» (по усмотрению сторон), что означает, что Сотрудник может уволиться в любое время, а Работодатель может исключить Сотрудника из процесса набора в любое время с указанием причины или без неё. Также понимается, что эти трудовые отношения «at will» не могут быть изменены никаким письменным документом или действиями, если только такое изменение не подтверждено в письменной форме уполномоченным руководителем данной организации. В случае трудоустройства я понимаю, что любая ложная или вводящая в заблуждение информация в моём заявлении может повлечь отказ и запрет на повторную подачу. Я также понимаю, что обязан(-а) соблюдать все правила и положения работодателя."],
+["t","8.1","Полное имя (подпись)"],["m","","Подпись: рисуется из имени и фамилии, при генерации BBCode сама загружается на imgbb и вставляется картинкой в 8.1"],["t","8.2","Полное имя (печатными буквами)"],["t","8.3","Дата","","14/АВГ/2026"]]},
+{h:"9. (( OUT OF CHARACTER ))",i:[
+["t","9.1","Имя / никнейм"],["t","9.1.2","Discord"],["r","9.2","Пол:",O(GD)],["t","9.3","Возраст"],
+["t","9.4","Время игры на Gambit"],["t","9.5","Время игры в SAMP"],
+["a","9.6","Перечислите ВСЕХ текущих и прошлых персонажей:","","(Текущий) Имя Фамилия"],
+["a","9.7","Перечислите ВСЕ прошлые официальные/неофициальные членства во фракциях с последним рангом и причиной, по которой вы ушли или были уволены:",ND],
+["t","9.8","Если вы ранее состояли в LSPD, укажите дату увольнения или отставки",ND],
+["t","9.9","Если вы ранее состояли в LSPD, приложите ссылку на ваш Запрос на восстановление, по которому вам разрешили пройти набор",ND],
+["a","9.10","Проходили ли вы ранее процесс набора во фракцию Департамента полиции Лос-Сантоса? Если да, то под каким персонажем и в каком месяце и году?:",ND],
+["r","9.11.1","Состоите ли вы в данный момент в официальной ИЛИ неофициальной фракции с другого аккаунта?",O(YN)],
+["a","9.11.2","Если на 9.11.1 вы ответили «Да», укажите, в каких фракциях:",ND,"","9.11.1"],
+["t","9.11.3","Если на 9.11.1 вы ответили «Да», приложите скриншот одобрения двойной фракции от вашего руководства",ND,"","9.11.1"],
+["t","9.12","Имя на форуме Gambit"],["t","9.13","Ссылка на профиль на форуме Gambit","","Ссылка (forum.gambit-rp.com/)"],
+["t","9.14","Скриншот двухфакторной аутентификации","","Ссылка (gambit-rp.com)"],
+["a","9.15","Скриншот панели всех персонажей в личном кабинете GAMBIT-RP.COM","","gambit-rp.com"],
+["r","9.16","Есть ли у вас рабочий микрофон?",O(YN)],
+["a","9.17","Какова предыстория вашего персонажа? Включите детство, прошлые места работы, мотивацию и т.д. (максимум 600 слов):"],
+["g","9.18","Образец отпечатков пальцев",()=>`* ${nm()} предоставляет отпечатки всех пальцев в Административном здании полиции ${dt()}.`],
+["g","9.19.1","Тест на наркотики",()=>`* ${nm()} прибывает в Административное здание LSPD ${dt()} для сдачи теста на наркотики.`]]},
+{h:"10. (( РАЗРЕШЕНИЕ И ОТКАЗ ОТ ПРЕТЕНЗИЙ ))",i:[
+["p","","Подавая эту Анкету кандидата, я подтверждаю, что мне не было запрещено подавать заявление в LSPD и что я нахожусь в хорошем положении в LSPD. Я понимаю и принимаю тот факт, что если будет доказан какой-либо OOC-обман в моём поданном заявлении, я несу ответственность и понесу административное наказание за OOC-обман в официальном заявлении. Настоящим я заявляю, что ничто в данной анкете не является ложным или обманным и всё вышеизложенное в данной анкете на 100% точно и честно. Я беру на себя полную ответственность за любое нарушение политики набора."],
+["p","","Я понимаю, что LSPD и его подчинённые (сотрудники по набору и трудоустройству) имеют полное право OOC отклонить моё заявление или запретить мне подавать заявления по любой причине, без объяснения причин или обоснования. Я также соглашаюсь, что любая попытка перейти в другой правоохранительный или государственный орган должна быть согласована с лидером фракции LSPD до того, как это произойдёт. Я понимаю, что данное заявление носит характер отношений «at will» и обязуюсь соблюдать все правила набора."],
+["t","","Подпись"]]}
 ];
 
-
-const licenseQuestions = [
-
-    "У вас есть водительские права?",
-
-    "Были ли ваши водительские права когда-либо изъяты?",
-
-    "Имеются ли у Вас неоплаченные штрафы?",
-
-    "Получали ли вы штрафы за последние пять лет?",
-
-    "Были ли вы участником дорожно-транспортного происшествия?",
-
-    "Вы имеете лицензию на огнестрельное оружие?",
-
-    "Была ли ваша оружейная лицензия когда-либо изъята?"
-
-];
-
-
-const oocQuestions = [
-
-    "Вы сможете проводить на лекциях около 2-х часов?",
-
-    "Можете ли Вы свободно общаться в TeamSpeak3 / Discord?",
-
-    "Имеется ли у вас рабочий микрофон?"
-
-];
-
-
-/* =========================================================
-   CREATE QUESTIONS
-========================================================= */
-
-function createQuestions(container, questions, prefix) {
-
-    const el = document.getElementById(container);
-
-    el.innerHTML = "";
-
-    questions.forEach((question, index) => {
-
-        el.insertAdjacentHTML(
-            "beforeend",
-
-            `
-            <div class="question">
-
-                <div class="question-text">
-                    ${index + 1}. ${question}
-                </div>
-
-                <div class="answers">
-
-                    <label class="answer">
-                        <input
-                            type="radio"
-                            name="${prefix}${index}"
-                            value="Да"
-                            checked>
-                        <span>Да</span>
-                    </label>
-
-                    <label class="answer">
-                        <input
-                            type="radio"
-                            name="${prefix}${index}"
-                            value="Нет">
-                        <span>Нет</span>
-                    </label>
-
-                </div>
-
-            </div>
-            `
-        );
-
+/* ---------- РЕНДЕР ФОРМЫ ---------- */
+const byN={};
+const pages=document.getElementById("pages");
+S.forEach((s,si)=>{
+    let h=`<section class="step-page" data-page="${si+1}" hidden><div class="section-card"><div class="section-header"><small>Раздел ${String(si+1).padStart(2,"0")}</small><h2>${s.h}</h2></div><div class="section-body">`;
+    s.i.forEach((it,ii)=>{
+        const [t,n,l,x,ph,dep]=it,k=it.k=si+"_"+ii,lab=((n+" "+l).trim()||ph||"");
+        const dA=dep?` data-dep="${dep}"${t=="r"?' data-req="1"':""}`:"";
+        if(n)byN[n]=it;
+        if(t=="p")h+=`<p class="txt">${l}</p>`;
+        else if(t=="h")h+=`<h3>${n} ${l}</h3>`;
+        else if(t=="g")h+=`<p class="txt"><i>${n} ${l}: формируется автоматически из имени (1.1–1.2) и даты (8.3).</i></p>`;
+        else if(t=="m")h+=`<div class="field sigbox"><label>${l}</label><canvas id="sig" width="640" height="190"></canvas><div class="sigbar"><select id="sigfont" onchange="sigDraw()"><option>Mrs Saint Delafield</option><option>Herr Von Muellerhoff</option><option>Marck Script</option></select><button type="button" class="btn" onclick="sigUpload()">Загрузить подпись</button></div><div class="txt" id="sigstatus"></div></div>`;
+        else if(t=="r"||t=="c")h+=`<div class="field${t=="r"&&!dep&&!["2.2.1","2.3"].includes(n)?" required":""}"${dA}><label>${lab}</label><div class="opts">`+x.map(o=>`<label class="answer"><input type="${t=="r"?"radio":"checkbox"}" name="${k}" value="${o}"><span>${o}</span></label>`).join("")+`</div><div class="field-error">Выберите вариант.</div></div>`;
+        else{
+            const req=(t!="i"&&!dep)?" required":"",da=dA,ctl=t=="a"?`<textarea data-k="${k}" placeholder="${ph||""}">${x||""}</textarea>`:`<input data-k="${k}" value="${x||""}" placeholder="${ph||""}">`;
+            h+=`<div class="field${req}"${da}><label>${lab}</label>${ctl}<div class="field-error">Поле обязательно.</div></div>`;
+        }
     });
+    pages.insertAdjacentHTML("beforeend",h+`</div></div></section>`);
+});
 
-}
+/* ---------- УТИЛИТЫ ---------- */
+const gv=k=>{const e=document.querySelector(`[data-k="${k}"]`);return e?e.value.trim():""};
+const nm=()=>gv(byN["1.2"].k)+" "+gv(byN["1.1"].k);
+const dt=()=>gv(byN["8.3"].k);
+const esc=t=>String(t||"").replace(/\[/g,"(").replace(/\]/g,")");
+const link=t=>t.replace(/(https?:\/\/\S+)/g,"[url=$1]ACCESS[/url]");
+const NB="\u00A0".repeat(12),ON="[color=#2f8fdd]☑[/color]",OFF="[color=#bfc6cd]☐[/color]";
+/* размер текста на форуме: 3 (мельче) или 4 (крупнее); можно попробовать и "14px" — проверь в превью форума */
+const BODY_SIZE="3";
+const LOGO_URL="https://i.imgur.com/tJxXQFt.png";
 
-
-createQuestions(
-    "criminalQuestions",
-    criminalQuestions,
-    "criminal_"
-);
-
-createQuestions(
-    "licenseQuestions",
-    licenseQuestions,
-    "license_"
-);
-
-createQuestions(
-    "oocQuestions",
-    oocQuestions,
-    "ooc_"
-);
-
-
-/* =========================================================
-   STEPS
-========================================================= */
-
-let currentStep = 1;
-
-const totalSteps = 7;
-
-
-const titles = {
-
-    1: [
-        "Персональные данные",
-        "Основная информация кандидата"
-    ],
-
-    2: [
-        "Уголовные вопросы",
-        "История правонарушений"
-    ],
-
-    3: [
-        "Лицензии",
-        "Водительские и оружейные лицензии"
-    ],
-
-    4: [
-        "Декларация",
-        "Подтверждение достоверности информации"
-    ],
-
-    5: [
-        "OOC информация",
-        "Информация об игроке"
-    ],
-
-    6: [
-        "Персонаж",
-        "Роль и дополнительные материалы"
-    ],
-
-    7: [
-        "Готовый BBCode",
-        "Код для вставки на XenForo"
-    ]
-
-};
-
-
-/* =========================================================
-   VALUE
-========================================================= */
-
-function value(id) {
-
-    const el = document.getElementById(id);
-
-    return el
-        ? el.value.trim()
-        : "";
-
-}
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-function escapeBBCode(text) {
-
-    return String(text || "")
-        .replace(/\[/g, "(")
-        .replace(/\]/g, ")");
-
-}
-
-
-/* =========================================================
-   ANSWER
-========================================================= */
-
-function answer(name) {
-
-    const el = document.querySelector(
-        `input[name="${name}"]:checked`
-    );
-
-    return el
-        ? el.value
-        : "";
-}
-
-
-/* =========================================================
-   VALIDATION
-========================================================= */
-
-function validateStep(step) {
-
-    let valid = true;
-
-    const page = document.querySelector(
-        `.step-page[data-page="${step}"]`
-    );
-
-    if (!page) return true;
-
-
-    /* обычные required-поля */
-
-    page.querySelectorAll(
-        ".field.required"
-    ).forEach(field => {
-
-        const input =
-            field.querySelector(
-                "input, textarea, select"
-            );
-
-        if (!input) return;
-
-
-        if (!input.value.trim()) {
-
-            field.classList.add("error");
-
-            valid = false;
-
-        } else {
-
-            field.classList.remove("error");
-
+/* ---------- ЗАВИСИМЫЕ ПОЛЯ (Да -> обязательно, Нет -> Н/Д) ---------- */
+/* data-dep="N=Значение|opt": поле активно только если в вопросе N выбрано «Значение»
+   (по умолчанию «Да»). Неактивно -> «Н/Д» / «Нет» / снятые галочки и блокировка.
+   |opt — после активации поле необязательное. */
+function depSync(){
+    document.querySelectorAll("[data-dep]").forEach(f=>{
+        const [spec,opt]=f.dataset.dep.split("|"),[pn,tv="Да"]=spec.split("="),p=byN[pn];
+        const sel=[...document.querySelectorAll(`input[name="${p.k}"]:checked`)].map(e=>e.value);
+        const on=sel.includes(tv),opts=f.querySelector(".opts");
+        if(opts){
+            const ins=opts.querySelectorAll("input");
+            if(!on){
+                ins.forEach(i=>{i.checked=i.type=="radio"&&i.value=="Нет";i.disabled=true});
+                f._auto=1;f.classList.remove("required","error");
+            }else{
+                ins.forEach(i=>i.disabled=false);
+                if(f._auto){ins.forEach(i=>i.checked=false);f._auto=0}
+                if(f.dataset.req)f.classList.add("required");
+            }
+        }else{
+            const c=f.querySelector("input,textarea");
+            if(!on){
+                c.value=ND;c.readOnly=true;f.classList.remove("required","error");
+            }else{
+                if(!opt&&c.value.trim()==ND)c.value="";
+                c.readOnly=false;
+                f.classList.toggle("required",!opt);
+            }
         }
-
     });
+}
+document.addEventListener("change",depSync);
+document.addEventListener("click",()=>setTimeout(depSync,0));
 
-
-    /* декларация */
-
-    if (step === 4) {
-
-        const checkbox =
-            document.getElementById("accept1");
-
-        const block =
-            document.getElementById("acceptBlock");
-
-        if (!checkbox.checked) {
-
-            block.classList.add("error");
-
-            valid = false;
-
-        } else {
-
-            block.classList.remove("error");
-
-        }
-
-    }
-
-
-    if (!valid) {
-
-        toast(
-            "Заполните все обязательные поля"
-        );
-
-    }
-
-
-    return valid;
-
+function heading(text){
+    return "[block=black][indent][font=Arial Black][color=white]"+text+"[/color][/font][/indent][/block][bg=white]\n[size="+BODY_SIZE+"][indent][font=Arial][color=black]";
+}
+/* срезает хвостовые пустые строки; между блоками переводов строк нет */
+function closeSection(text){
+    return String(text).replace(/\s+$/,"")+"\n[/color][/font][/indent][/size]\n[/bg]";
 }
 
+/* ---------- ГЕНЕРАЦИЯ BBCODE ---------- */
+function gen(){
+    document.getElementById("topicTitle").value="[POI] "+(nm().trim()||"Имя Фамилия");
+    let b="[box=white][color=black][indent]\n";
+    b+="[center][img width=\"130px\" height=\"130px\"]"+LOGO_URL+"[/img][/center]\n\n";
+    b+="[center][font=Arial Black][size=5][b]LOS SANTOS POLICE DEPARTMENT[/b][/size][/font]\n";
+    b+="[size=4]PRELIMINARY BACKGROUND APPLICATION[/size][/center]\n[/indent][/color][/box]";
+    S.forEach(s=>{
+        let o="";
+        s.i.forEach(it=>{
+            const [t,n,l,x]=it,k=it.k,N=n?"[B]"+n+"[/B] ":"";
+            if(t=="p")o+=esc(l)+"\n\n";
+            else if(t=="h")o+=(o?"\n":"")+N+esc(l)+"\n";
+            else if(t=="r"||t=="c"){
+                const sel=[...document.querySelectorAll(`input[name="${k}"]:checked`)].map(e=>e.value);
+                o+=N+esc(l)+"\n";
+                x.forEach(op=>o+=NB+(sel.includes(op)?ON:OFF)+" "+esc(op)+"\n");
+                o+="\n";
+            }else if(t=="m"){
+                const v=gv(k);if(v)o+="[img]"+v+"[/img]\n";
+            }else if(t=="i"){
+                const v=gv(k);
+                o+=N+esc(l)+"\n"+(v?"[img]"+v+"[/img]\n":"");
+            }else{
+                let v=t=="g"?"[color=#C2A2DA]"+esc(x())+"[/color]":link(esc(gv(k)));
+                let sg=0;
+                if((n=="8.1"||l=="Подпись")&&v){const u=sigUrl();if(u){v="[img width=\"260px\"]"+u+"[/img]";sg=1}}
+                if(!l||(sg&&l=="Подпись"))o+=v+"\n";
+                else o+=N+esc(l)+(sg||v.includes("\n")?":\n":": ")+v+"\n";
+            }
+        });
+        b+=heading(s.h)+o;
+        b=closeSection(b);
+    });
+    document.getElementById("bbcode").value=b;
+}
 
-/* =========================================================
-   VALIDATE EVERYTHING
-========================================================= */
+/* ---------- ШАГИ ---------- */
+let cur=1;const T=S.length+1;
 
-function validateEverything() {
-
-    for (
-        let step = 1;
-        step <= 6;
-        step++
-    ) {
-
-        if (!validateStep(step)) {
-
-            showStep(step);
-
-            return false;
-
-        }
-
-    }
-
+function val(step){
+    let ok=true;
+    const p=document.querySelector(`.step-page[data-page="${step}"]`);
+    if(!p)return true;
+    p.querySelectorAll(".field.required").forEach(f=>{
+        const bad=f.querySelector(".opts")?!f.querySelector("input:checked"):!f.querySelector("input,textarea").value.trim();
+        f.classList.toggle("error",bad);
+        if(bad)ok=false;
+    });
+    if(!ok)toast("Заполните все обязательные поля");
+    return ok;
+}
+function valAll(){
+    for(let s=1;s<T;s++)if(!val(s)){show(s);return false}
     return true;
-
 }
-
-
-/* =========================================================
-   SHOW STEP
-========================================================= */
-
-function showStep(step) {
-
-    currentStep = step;
-
-
-    document
-        .querySelectorAll(".step-page")
-        .forEach(page => {
-
-            page.hidden =
-                Number(page.dataset.page) !== step;
-
-        });
-
-
-    document
-        .querySelectorAll(".step")
-        .forEach(button => {
-
-            const n =
-                Number(button.dataset.step);
-
-            button.classList.toggle(
-                "active",
-                n === step
-            );
-
-            button.classList.toggle(
-                "completed",
-                n < step
-            );
-
-        });
-
-
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        titles[step][0];
-
-
-    document.getElementById(
-        "pageDescription"
-    ).textContent =
-        titles[step][1];
-
-
-    document.getElementById(
-        "backBtn"
-    ).style.visibility =
-        step === 1
-            ? "hidden"
-            : "visible";
-
-
-    document.getElementById(
-        "nextBtn"
-    ).textContent =
-        step === 6
-            ? "Сгенерировать BBCode"
-            : step === 7
-                ? "Обновить BBCode"
-                : "Далее →";
-
-
-    updateProgress();
-
-
-    if (step === 7) {
-
-        generateBBCode();
-
-    }
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
+function show(s){
+    cur=s;
+    document.querySelectorAll(".step-page").forEach(p=>p.hidden=Number(p.dataset.page)!==s);
+    document.getElementById("pageDescription").textContent="Preliminary Background Application — страница "+s+" из "+T;
+    document.getElementById("backBtn").style.visibility=s==1?"hidden":"visible";
+    document.getElementById("nextBtn").textContent=s==T-1?"Сгенерировать BBCode":s==T?"Обновить BBCode":"Далее →";
+    if(s==T)gen();
+    sigDraw();
+    window.scrollTo({top:0,behavior:"smooth"});
 }
-
-
-/* =========================================================
-   NEXT
-========================================================= */
-
-function nextStep() {
-
-    /* STEP 6 -> GENERATE */
-
-    if (currentStep === 6) {
-
-        if (!validateEverything()) {
-
-            return;
-
-        }
-
-        generateBBCode();
-
-        showStep(7);
-
-        toast(
-            "BBCode успешно сгенерирован"
-        );
-
+async function nextStep(){
+    if(cur>=T-1){
+        if(!valAll())return;
+        toast("Генерирую BBCode…");
+        await sigUpload();
+        gen();
+        if(cur==T-1)show(T);
+        toast(sigUrl()?"BBCode готов, подпись добавлена":"BBCode готов, но подпись не загрузилась — см. статус в разделе 8");
         return;
-
     }
-
-
-    /* STEP 7 */
-
-    if (currentStep === 7) {
-
-        if (!validateEverything()) {
-
-            return;
-
-        }
-
-        generateBBCode();
-
-        toast(
-            "BBCode обновлён"
-        );
-
-        return;
-
-    }
-
-
-    /* обычный переход */
-
-    if (!validateStep(currentStep)) {
-
-        return;
-
-    }
-
-
-    if (currentStep < totalSteps) {
-
-        showStep(
-            currentStep + 1
-        );
-
-    }
-
+    if(val(cur))show(cur+1);
 }
+function previousStep(){if(cur>1)show(cur-1)}
 
+document.addEventListener("input",e=>{
+    const f=e.target.closest(".field");
+    if(f&&e.target.value.trim())f.classList.remove("error");
+});
 
-/* =========================================================
-   PREVIOUS
-========================================================= */
-
-function previousStep() {
-
-    if (currentStep > 1) {
-
-        showStep(
-            currentStep - 1
-        );
-
-    }
-
+/* ---------- КОПИРОВАНИЕ / СБРОС ---------- */
+async function copyEl(id,msg){
+    const el=document.getElementById(id);
+    try{await navigator.clipboard.writeText(el.value)}catch{el.select();document.execCommand("copy")}
+    toast(msg);
 }
-
-
-/* =========================================================
-   SIDEBAR CLICK
-========================================================= */
-
-document
-    .querySelectorAll(".step")
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const target =
-                    Number(
-                        button.dataset.step
-                    );
-
-
-                /*
-                 Не позволяем перескочить
-                 на BBCode, если анкета
-                 не заполнена.
-                */
-
-                if (target === 7) {
-
-                    if (!validateEverything()) {
-
-                        return;
-
-                    }
-
-                    generateBBCode();
-
-                }
-
-
-                showStep(target);
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-function updateProgress() {
-
-    const fields =
-        document.querySelectorAll(
-            "input:not([type=radio]):not([type=checkbox]), textarea"
-        );
-
-
-    let filled = 0;
-
-
-    fields.forEach(field => {
-
-        if (field.value.trim()) {
-
-            filled++;
-
-        }
-
-    });
-
-
-    const percent =
-        fields.length
-            ? Math.round(
-                filled /
-                fields.length *
-                100
-            )
-            : 0;
-
-
-    document.getElementById(
-        "progress"
-    ).style.width =
-        percent + "%";
-
-
-    document.getElementById(
-        "progressText"
-    ).textContent =
-        percent + "%";
-
+const copyBBCode=()=>copyEl("bbcode","BBCode скопирован");
+const copyTopicTitle=()=>copyEl("topicTitle","Заголовок скопирован");
+function resetForm(){
+    if(confirm("Очистить всю анкету?"))location.replace(location.href);
 }
-
-
-document.addEventListener(
-    "input",
-    updateProgress
-);
-
-
-/* =========================================================
-   REMOVE ERROR WHEN USER TYPES
-========================================================= */
-
-document.addEventListener(
-    "input",
-    event => {
-
-        const field =
-            event.target.closest(".field");
-
-        if (field) {
-
-            if (
-                event.target.value.trim()
-            ) {
-
-                field.classList.remove(
-                    "error"
-                );
-
-            }
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   GENERATE TOPIC TITLE
-========================================================= */
-
-function generateTopicTitle() {
-
-    const name = value("fullname");
-
-    const title =
-        "[POI] " + (name || "Имя Фамилия");
-
-
-    document.getElementById(
-        "topicTitle"
-    ).value = title;
-
-}
-
-
-/* =========================================================
-   GENERATE BBCODE
-========================================================= */
-
-function generateBBCode() {
-
-    let b = "";
-
-
-    generateTopicTitle();
-
-
-    /*
-     HEADER
-    */
-
-    b += "[CENTER]\n";
-
-    b += "[SIZE=6][B]";
-    b += "LOS SANTOS POLICE DEPARTMENT";
-    b += "[/B][/SIZE]\n";
-
-    b += "[SIZE=4][B]";
-    b += "PRELIMINARY BACKGROUND APPLICATION";
-    b += "[/B][/SIZE]\n";
-
-    b += "[/CENTER]\n";
-
-    b += "[HR][/HR]\n\n";
-
-
-    /*
-     NAME
-    */
-
-    b += "[CENTER]\n";
-
-    b += "[SIZE=5][B]";
-    b += escapeBBCode(
-        value("fullname")
-    );
-    b += "[/B][/SIZE]\n";
-
-    b += "[/CENTER]\n\n";
-
-
-    /*
-     PERSONAL
-    */
-
-    b += "[HEADING=2]";
-    b += "1. ПЕРСОНАЛЬНАЯ ИНФОРМАЦИЯ";
-    b += "[/HEADING]\n";
-
-
-    const personal = [
-
-        ["1.1.", "Пол", "sex"],
-
-        ["1.2.", "Возраст", "age"],
-
-        ["1.3.", "Дата рождения", "bdate"],
-
-        ["1.4.", "Номер мобильного телефона", "tnumber"],
-
-        ["1.5.", "Гражданство / резидентство", "citizenship"],
-
-        ["1.6.", "Этническая группа / раса", "race"],
-
-        ["1.7.", "Образование", "education"],
-
-        ["1.8.", "Место рождения", "badress"],
-
-        ["1.9.", "Адрес проживания", "ladress"],
-
-        ["1.10.", "Адрес электронной почты", "email"],
-
-        ["1.11.", "Номер социального страхования", "ssnumber"]
-
-    ];
-
-
-    personal.forEach(row => {
-
-        b += "[B]";
-        b += row[0];
-        b += "[/B] ";
-
-        b += row[1];
-        b += ": ";
-
-        b += escapeBBCode(
-            value(row[2])
-        );
-
-        b += "\n";
-
-    });
-
-
-    b += "\n";
-
-
-    /*
-     CRIMINAL
-    */
-
-    b += "[HEADING=2]";
-    b += "2. УГОЛОВНЫЕ ПРАВОНАРУШЕНИЯ";
-    b += "[/HEADING]\n";
-
-
-    criminalQuestions.forEach(
-        (question, index) => {
-
-            b += "[B]2.";
-            b += index + 1;
-            b += ".[/B] ";
-
-            b += escapeBBCode(
-                question
-            );
-
-            b += " — [B]";
-
-            b += answer(
-                "criminal_" + index
-            );
-
-            b += "[/B]\n";
-
-        }
-    );
-
-
-    b += "\n";
-
-
-    /*
-     LICENSE
-    */
-
-    b += "[HEADING=2]";
-    b += "3. ЛИЦЕНЗИИ И РАЗРЕШЕНИЯ";
-    b += "[/HEADING]\n";
-
-
-    licenseQuestions.forEach(
-        (question, index) => {
-
-            b += "[B]3.";
-            b += index + 1;
-            b += ".[/B] ";
-
-            b += escapeBBCode(
-                question
-            );
-
-            b += " — [B]";
-
-            b += answer(
-                "license_" + index
-            );
-
-            b += "[/B]\n";
-
-        }
-    );
-
-
-    b += "\n";
-
-
-    /*
-     DECLARATION
-    */
-
-    b += "[HEADING=2]";
-    b += "4. ДЕКЛАРАЦИЯ АБИТУРИЕНТА";
-    b += "[/HEADING]\n";
-
-    b +=
-        "Я подтверждаю, что вся информация, " +
-        "указанная в данном заявлении, является " +
-        "достоверной.\n\n";
-
-    b +=
-        "Я понимаю, что предоставление ложной " +
-        "информации может привести к отклонению заявки.\n\n";
-
-    b +=
-        "Я даю согласие на обработку своих " +
-        "персональных данных.\n\n";
-
-    b += "[B]✓ Я ПРИНИМАЮ УСЛОВИЯ ДАННОГО ЗАЯВЛЕНИЯ[/B]\n\n";
-
-
-    /*
-     OOC
-    */
-
-    b += "[HEADING=2]";
-    b += "5. OUT OF CHARACTER INFORMATION";
-    b += "[/HEADING]\n";
-
-
-    const ooc = [
-
-        ["5.1.", "Имя", "oocname"],
-
-        ["5.2.", "Возраст", "oocage"],
-
-        ["5.3.", "Опыт игры", "oocexp"],
-
-        ["5.4.", "Место жительства / часовой пояс", "oocplace"],
-
-        ["5.5.", "VK и Telegram", "vk"],
-
-        ["5.6.", "Форумный аккаунт G-RP", "grplink"],
-
-        ["5.7.", "Discord логин", "discordlogin"]
-
-    ];
-
-
-    ooc.forEach(row => {
-
-        b += "[B]";
-        b += row[0];
-        b += "[/B] ";
-
-        b += row[1];
-        b += ": ";
-
-        b += escapeBBCode(
-            value(row[2])
-        );
-
-        b += "\n";
-
-    });
-
-
-    oocQuestions.forEach(
-        (question, index) => {
-
-            b += "[B]5.";
-            b += index + 8;
-            b += ".[/B] ";
-
-            b += escapeBBCode(
-                question
-            );
-
-            b += " — [B]";
-
-            b += answer(
-                "ooc_" + index
-            );
-
-            b += "[/B]\n";
-
-        }
-    );
-
-
-    b += "\n";
-
-
-    /*
-     CHARACTER
-    */
-
-    b += "[HEADING=2]";
-    b += "5.11. ПЕРСОНАЖ";
-    b += "[/HEADING]\n";
-
-    b += "[QUOTE]";
-    b += escapeBBCode(
-        value("characterdesc")
-    );
-    b += "[/QUOTE]\n\n";
-
-
-    /*
-     LK
-    */
-
-    b += "[B]5.12. Скриншот личного кабинета[/B]\n";
-
-    b += "[QUOTE]";
-    b += escapeBBCode(
-        value("lkscreen")
-    );
-    b += "[/QUOTE]\n\n";
-
-
-    /*
-     2FA
-    */
-
-    b += "[B]5.13. Скриншот двухфакторной защиты[/B]\n";
-
-    b += "[QUOTE]";
-    b += escapeBBCode(
-        value("twofa")
-    );
-    b += "[/QUOTE]\n\n";
-
-
-    /*
-     ROLES
-    */
-
-    b += "[B]5.14. Интересные роли за историю игры[/B]\n";
-
-    b += "[QUOTE]";
-    b += escapeBBCode(
-        value("ss")
-    );
-    b += "[/QUOTE]\n\n";
-
-
-    document.getElementById(
-        "bbcode"
-    ).value = b;
-
-}
-
-
-/* =========================================================
-   COPY BBCODE
-========================================================= */
-
-async function copyBBCode() {
-
-    const textarea =
-        document.getElementById(
-            "bbcode"
-        );
-
-
-    try {
-
-        await navigator.clipboard.writeText(
-            textarea.value
-        );
-
-        toast(
-            "BBCode скопирован"
-        );
-
-    } catch {
-
-        textarea.select();
-
-        document.execCommand(
-            "copy"
-        );
-
-        toast(
-            "BBCode скопирован"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   COPY TOPIC TITLE
-========================================================= */
-
-async function copyTopicTitle() {
-
-    const input =
-        document.getElementById(
-            "topicTitle"
-        );
-
-
-    try {
-
-        await navigator.clipboard.writeText(
-            input.value
-        );
-
-        toast(
-            "Заголовок скопирован"
-        );
-
-    } catch {
-
-        input.select();
-
-        document.execCommand(
-            "copy"
-        );
-
-        toast(
-            "Заголовок скопирован"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-function resetForm() {
-
-    if (
-        !confirm(
-            "Очистить всю анкету?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    document
-        .querySelectorAll(
-            "input:not([type=radio]):not([type=checkbox]), textarea"
-        )
-        .forEach(el => {
-
-            el.value = "";
-
-        });
-
-
-    document
-        .querySelectorAll(
-            "input[type=checkbox]"
-        )
-        .forEach(el => {
-
-            el.checked = false;
-
-        });
-
-
-    document
-        .querySelectorAll(
-            'input[type=radio][value="Да"]'
-        )
-        .forEach(el => {
-
-            el.checked = true;
-
-        });
-
-
-    document
-        .querySelectorAll(
-            ".field.error"
-        )
-        .forEach(el => {
-
-            el.classList.remove(
-                "error"
-            );
-
-        });
-
-
-    document
-        .getElementById(
-            "acceptBlock"
-        )
-        .classList.remove(
-            "error"
-        );
-
-
-    document.getElementById(
-        "bbcode"
-    ).value = "";
-
-
-    document.getElementById(
-        "topicTitle"
-    ).value = "";
-
-
-    showStep(1);
-
-    updateProgress();
-
-    toast(
-        "Анкета очищена"
-    );
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
 
 let toastTimer;
-
-
-function toast(message) {
-
-    const el =
-        document.getElementById(
-            "toast"
-        );
-
-
-    el.textContent =
-        message;
-
-
-    el.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                el.classList.remove(
-                    "show"
-                );
-
-            },
-            1800
-        );
-
+function toast(m){
+    const el=document.getElementById("toast");
+    el.textContent=m;el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>el.classList.remove("show"),1800);
 }
 
+/* ---------- АВТОЗАГРУЗКА ПОДПИСИ НА IMGBB ----------
+   Ключ: api.imgbb.com -> войти -> "Get API key" -> скопировать сюда. */
+const IMGBB_API_KEY="11f352cb221456fa0d5b3c1c58eb897c";
+let sigCache={key:"",url:""},sigBusy=null;
+const sigKey=()=>nm().trim()+"|"+(document.getElementById("sigfont")||{}).value;
+const sigUrl=()=>sigCache.key==sigKey()?sigCache.url:"";
+function sigStatus(m,err){
+    const e=document.getElementById("sigstatus");
+    if(e){e.textContent="Статус подписи: "+m;e.style.color=err?"#b00020":"#111"}
+}
+function sigUpload(){
+    if(sigBusy)return sigBusy;
+    if(!nm().trim()){sigStatus("сначала впиши имя и фамилию (1.1–1.2)",1);return Promise.resolve()}
+    if(sigUrl()){sigStatus("загружена ✓");return Promise.resolve()}
+    if(!IMGBB_API_KEY){sigStatus("не задан IMGBB_API_KEY в коде",1);return Promise.resolve()}
+    sigBusy=(async()=>{
+        sigStatus("загружаю…");
+        try{
+            await sigDraw();
+            const key=sigKey(),fd=new FormData();
+            fd.append("image",document.getElementById("sig").toDataURL("image/png").split(",")[1]);
+            const r=await fetch("https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY,{method:"POST",body:fd});
+            const j=await r.json().catch(()=>({}));
+            if(!r.ok||!j.success)throw new Error((j.error&&j.error.message)||("HTTP "+r.status));
+            sigCache={key,url:j.data.url};
+            sigStatus("загружена ✓");
+        }catch(e){
+            sigStatus("не удалось загрузить — "+(e.message&&e.message!="Failed to fetch"?e.message:"нет связи с imgbb или блокировка браузера"),1);
+        }finally{sigBusy=null}
+    })();
+    return sigBusy;
+}
 
-/* =========================================================
-   INIT
-========================================================= */
+/* ---------- СНЯТИЕ ВЫБОРА У РАДИО (повторный клик) ---------- */
+document.addEventListener("click",e=>{
+    const l=e.target.closest(".opts label.answer");
+    if(!l)return;
+    const i=l.querySelector("input");
+    if(i.type!="radio")return;
+    if(e.target===i){if(l._w)i.checked=false;l._w=0}
+    else l._w=i.checked;
+},true);
 
-showStep(1);
+/* ---------- ПОДПИСЬ ИЗ ИМЕНИ И ФАМИЛИИ ---------- */
+function sigPaint(){
+    const c=document.getElementById("sig");
+    if(!c)return;
+    const f=document.getElementById("sigfont").value,x=c.getContext("2d"),t=nm().trim();
+    x.clearRect(0,0,c.width,c.height);
+    if(!t)return;
+    let z=130;
+    x.font=z+'px "'+f+'", cursive';
+    while(x.measureText(t).width>c.width-40&&z>24){z-=4;x.font=z+'px "'+f+'", cursive'}
+    x.fillStyle="#000";x.textAlign="center";x.textBaseline="middle";
+    x.fillText(t,c.width/2,c.height/2);
+}
+function sigDraw(){
+    const f=document.getElementById("sigfont");
+    if(!f)return Promise.resolve();
+    return document.fonts.load('48px "'+f.value+'"').catch(()=>{}).then(sigPaint);
+}
+function sigDl(){
+    const c=document.getElementById("sig");
+    c.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="signature.png";a.click()});
+}
+document.addEventListener("input",e=>{
+    const k=e.target.dataset&&e.target.dataset.k;
+    if(!k)return;
+    const a=byN["8.1"],b=byN["8.2"],z=S[S.length-1].i.slice(-1)[0];
+    if(k==a.k||k==b.k||k==z.k)e.target.dataset.t=1;
+    if(k==byN["1.1"].k||k==byN["1.2"].k){
+        [a,b,z].forEach(it=>{const el=document.querySelector(`[data-k="${it.k}"]`);if(!el.dataset.t)el.value=nm().trim()});
+        sigDraw();
+    }
+});
 
-updateProgress();
+depSync();
+show(1);
 
 </script>
 
